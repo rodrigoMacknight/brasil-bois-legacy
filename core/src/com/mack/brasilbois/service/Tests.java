@@ -4,6 +4,7 @@ import com.mack.brasilbois.BrBoisMain;
 import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.Card;
 
+import java.util.Random;
 import java.util.Stack;
 
 public class Tests {
@@ -24,23 +25,10 @@ public class Tests {
 
 
         for (int i= 0;i<cardTotal;i++){
-        Card c ;
-            if((i % 6) == 0){
-                c = BrBoisMain.allCards.get(5).getCopy();
-            }else
-            if((i % 5) == 0){
-                c = BrBoisMain.allCards.get(4).getCopy();
-            }else
-            if((i % 4) == 0) {
-                 c = BrBoisMain.allCards.get(0).getCopy();
-            }else if(i % 3 ==0){
-                 c =  BrBoisMain.allCards.get(1).getCopy();
-            }else if (i % 2 == 0){
-                c =  BrBoisMain.allCards.get(2).getCopy();
-            }else{
-
-                c =  BrBoisMain.allCards.get(3).getCopy();
-            }
+            Card c ;
+            Random rand =  new Random();
+            int allCardsCount = BrBoisMain.allCards.size();
+            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
 
             if(enemy) {
                 c.setxPos(SizePositionValues.ENEMY_GRIMORIO_X);

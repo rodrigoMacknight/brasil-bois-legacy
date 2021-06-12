@@ -3,11 +3,13 @@ package com.mack.brasilbois.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.mack.brasilbois.BrBoisMain;
+import com.mack.brasilbois.service.CardInteractor;
 import com.mack.brasilbois.service.Tests;
 import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.BattleField;
@@ -43,6 +45,9 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Texture atkHolder;
     public static Texture cocaine;
     public static Texture cristo;
+
+    public static Sound porradaSound;
+
 
     public static Vector2 playerHPPos;
     public static Vector2 enemyHPPos;
@@ -146,6 +151,9 @@ public class PlayScreen implements Screen, InputProcessor {
         //generating placeholder deck
         player = new Player(Tests.getTestDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
+
+        porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
+
 
         //set the player that owns that card for all the cards
         enemy.setOwner();
@@ -349,7 +357,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
         int ipsolon = Gdx.graphics.getHeight() - screenY;
         //if the card was not dropped in any valid card position return it to the grimorio.
-        Vector2 mousePos = new Vector2(screenX, screenY);
+        Vector2 mousePos = new Vector2(screenX, ipsolon);
         System.out.println("x: " + screenX);
         System.out.println("y: " + ipsolon);
 
@@ -402,10 +410,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     //the card was taken from a friendly battlefield
 
                     //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
-                    boolean survived = checkCardInteractions(mouse);
-                    if (survived) {
-                        currentCard.returnToLastPosition();
-                    }
+                    boolean survived = CardInteractor.checkCardInteractions(mouse);
                     break;
             }
 

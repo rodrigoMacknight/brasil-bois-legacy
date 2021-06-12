@@ -35,7 +35,7 @@ public class CardBuilder {
         Texture chicoTexture = new Texture("Card_arts/buarque.jpeg");
 
         CreatureCard chicoBuarque = new CreatureCard("Chico Buarque", 1, 8,1, Card.Faction.VERMELHA,
-                Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 7);
+                Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);
 
 
         chicoBuarque.setAbilities(CreatureCard.Ability.ATRAPALHAR_O_TRANSITO);
