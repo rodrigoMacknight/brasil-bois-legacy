@@ -7,6 +7,8 @@ import com.mack.brasilbois.model.CreatureCard;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.font.CreatedFontTracker;
+
 public class CardBuilder {
 
     //initialize all cards
@@ -27,12 +29,31 @@ public class CardBuilder {
 
         buildChicoBuarque(ret);
 
+
+
         return ret;
     }
 
+
+    public static CreatureCard buildChicoBuarqueDead() {
+
+        Texture chicoTexture = new Texture("Card_arts/chico_morto.png");
+
+        CreatureCard deadChico = new CreatureCard("Chico atrapalhando transito", 0, 99,1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);
+        deadChico.isSelectable = false;
+
+        //chicoBuarque.setAbilities(CreatureCard.Ability.ATRAPALHAR_O_TRANSITO);
+
+       return deadChico;
+
+    }
+
+
+
     private static void buildChicoBuarque(List<Card> ret) {
 
-        Texture chicoTexture = new Texture("Card_arts/buarque.jpeg");
+        Texture chicoTexture = new Texture("Card_arts/chico_vivo.png");
 
         CreatureCard chicoBuarque = new CreatureCard("Chico Buarque", 1, 8,1, Card.Faction.VERMELHA,
                 Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class BattleField {
     Vector2 xy;
     Card.BoardPlace where;
-    CreatureCard c;
+    CreatureCard currentCreature;
 
 
     public BattleField(Vector2 vector2, Card.BoardPlace field) {
@@ -29,7 +29,7 @@ public class BattleField {
                 card.fighted = false;
             }
         }
-        this.c = card;
+        this.currentCreature = card;
 
     }
 
@@ -38,6 +38,13 @@ public class BattleField {
     }
 
     public CreatureCard getCard() {
-        return c;
+        return currentCreature;
+    }
+
+
+    public void killCurrentCard() {
+        if (this.currentCreature!=null) {
+            this.currentCreature.kill();
+        }
     }
 }

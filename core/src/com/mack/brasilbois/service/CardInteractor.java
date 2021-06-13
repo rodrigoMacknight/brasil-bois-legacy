@@ -40,29 +40,30 @@ public class CardInteractor {
                 return  true;
             }
             //para cada inimigo no campo do inimigo
-            for (BattleField creatureField : enemyCreatureHolders) {
+            for (BattleField enemyCreatureField : enemyCreatureHolders) {
 
                 //soltei a carta perto de uma criatura inimiga
-                if (mousePosition.dst(creatureField.getXy()) < SizePositionValues.CARD_SNAP_DISTANCE) {
+                if (mousePosition.dst(enemyCreatureField.getXy()) < SizePositionValues.CARD_SNAP_DISTANCE) {
 
 
                     //se tem criatura e a criatura é passivel de ser target
                     //battle!
-                    if (creatureField.getCard() != null && creatureField.getCard().isTargetable()) {
+                    if (enemyCreatureField.getCard() != null && enemyCreatureField.getCard().isTargetable()) {
                         playHitEffect();
-                        creature.damage(creatureField.getCard());
+                        //da dano
+                        creature.damage(enemyCreatureField.getCard());
                         creature.fighted = true;
                         //se a criatura que defendeu morreu
-                        if(creatureField.getCard().getHealth()<=0){
-                            System.out.println("card "+ creatureField.getCard().getName() +  " died");
+                        if(enemyCreatureField.getCard().getHealth()<=0){
+                            System.out.println("card "+ enemyCreatureField.getCard().getName() +  " died");
 
-                            creatureField.setCard(null);
+                            enemyCreatureField.killCurrentCard();
                         }
 
-                        //morreu
+                        //se a criatura atacante morreu
                         if(creature.getHealth()<=0){
                             System.out.println("card "+ currentCard.getName() +  " died");
-                            currentCard = null;
+                            creature.kill();
 
                             return false;
                         }else{
