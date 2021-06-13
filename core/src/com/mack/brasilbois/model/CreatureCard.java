@@ -5,10 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mack.brasilbois.enums.SizePositionValues;
+import com.mack.brasilbois.service.CardBuilder;
 import com.mack.brasilbois.view.PlayScreen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import sun.font.CreatedFontTracker;
+
+import static com.mack.brasilbois.view.PlayScreen.currentCard;
+import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
 public class CreatureCard extends Card {
 
@@ -19,6 +25,7 @@ public class CreatureCard extends Card {
 
     private boolean targetable;
 
+    public boolean isSelectable = true;
 
     // a card is sick in the first turn, and after atacking
     private boolean sick;
@@ -38,6 +45,14 @@ public class CreatureCard extends Card {
     public enum Status{
         COCAINE,
         BUFF_DEF
+    }
+
+
+    public enum Ability{
+        STEALTH,
+        BUFF_COCAINE,
+        BUFF_GENTE_DE_BEM,
+        ATRAPALHAR_O_TRANSITO
     }
 
     public boolean hasDeployAction() {
@@ -79,6 +94,22 @@ public class CreatureCard extends Card {
         }
     }
 
+    public void doDeathAction() {
+        //bloqueia um campo adversario
+        if(abilities.contains(Ability.ATRAPALHAR_O_TRANSITO)) {
+            for (BattleField creatureHolder : enemyCreatureHolders) {
+                if (creatureHolder.getCard() == null ) {
+                    CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+                    creatureHolder.setCard(deadChico);
+                    deadChico.setxPos(creatureHolder.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                    deadChico.setyPos(creatureHolder.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                    return;
+                }
+
+            }
+        }
+    }
+
     private void addStatus(Status status) {
         cardStatus.add(status);
         if(status==Status.COCAINE){
@@ -95,30 +126,40 @@ public class CreatureCard extends Card {
         }
     }
 
-    private void kill() {
+    public void kill() {
         switch(getCurrentPlace()){
             case FIELD_1:
                 PlayScreen.getCreatureHolders().get(0).setCard(null);
+                break;
             case FIELD_2:
                 PlayScreen.getCreatureHolders().get(1).setCard(null);
+                break;
             case FIELD_3:
                 PlayScreen.getCreatureHolders().get(2).setCard(null);
+                break;
             case FIELD_4:
                 PlayScreen.getCreatureHolders().get(3).setCard(null);
+                break;
             case FIELD_5:
                 PlayScreen.getCreatureHolders().get(4).setCard(null);
+                break;
             case FIELD_6:
                 PlayScreen.getCreatureHolders().get(5).setCard(null);
+                break;
+        }
+
+        if(hasDeathAbility()) {
+            doDeathAction();
         }
     }
 
-
-    public enum Ability{
-        STEALTH,
-        BUFF_COCAINE,
-        BUFF_GENTE_DE_BEM,
-        ATRAPALHAR_O_TRANSITO
+    private boolean hasDeathAbility() {
+        if(abilities.contains(Ability.ATRAPALHAR_O_TRANSITO)){
+            return true;
+        }
+        return false;
     }
+
 
     public List<Ability> abilities;
 
@@ -162,7 +203,7 @@ public class CreatureCard extends Card {
         this.health-= card.getAtkTotal();
         int currentHealth = card.getHealth();
         card.setHealth(currentHealth - this.getAtkTotal());
-
+        //tira stealth
         if(this.targetable==false){
             this.targetable = true;
         }
@@ -284,6 +325,9 @@ public class CreatureCard extends Card {
                 abilities.add(ability);
                 break;
             case BUFF_GENTE_DE_BEM:
+                abilities.add(ability);
+                break;
+            default:
                 abilities.add(ability);
                 break;
         }
