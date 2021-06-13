@@ -125,18 +125,22 @@ public class CreatureCard extends Card {
         switch(getCurrentPlace()){
             case FIELD_1:
                 PlayScreen.getCreatureHolders().get(0).setCard(null);
+                break;
             case FIELD_2:
                 PlayScreen.getCreatureHolders().get(1).setCard(null);
+                break;
             case FIELD_3:
                 PlayScreen.getCreatureHolders().get(2).setCard(null);
+                break;
             case FIELD_4:
                 PlayScreen.getCreatureHolders().get(3).setCard(null);
+                break;
             case FIELD_5:
                 PlayScreen.getCreatureHolders().get(4).setCard(null);
+                break;
             case FIELD_6:
                 PlayScreen.getCreatureHolders().get(5).setCard(null);
-            case HAND:
-                currentCard = null;
+                break;
         }
 
         if(hasDeathAbility()) {

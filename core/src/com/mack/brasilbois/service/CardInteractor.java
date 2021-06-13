@@ -68,7 +68,6 @@ public class CardInteractor {
                             return false;
                         }else{
                             //it survived the battle
-                            currentCard.returnToLastPosition();
                             return true;
                         }
                     }

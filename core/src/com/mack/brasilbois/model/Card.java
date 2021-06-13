@@ -274,6 +274,7 @@ public abstract class Card {
                 break;
 
         }
+
     }
 
     public void setOwner(Player player) {

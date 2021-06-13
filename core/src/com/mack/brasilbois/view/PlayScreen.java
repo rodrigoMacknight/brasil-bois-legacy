@@ -344,6 +344,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     }
                     if (!wasPlaced) {
                         currentCard.returnToLastPosition();
+
                      //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
                     }
                     break;
@@ -357,6 +358,9 @@ public class PlayScreen implements Screen, InputProcessor {
 
                     //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
                     boolean survived = CardInteractor.checkCardInteractions(mouse);
+                    if(survived) {
+                        currentCard.returnToLastPosition();
+                    }
                     break;
             }
 
@@ -391,7 +395,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 currentCreature.setSick(true);
 
                 sendPlaceCardToServer(b, currentCreature);
-
+                currentCard = null; //solta a carta da mao
                 return true;
 
             } else {
