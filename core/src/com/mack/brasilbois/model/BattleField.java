@@ -45,6 +45,7 @@ public class BattleField {
     public void killCurrentCard() {
         if (this.currentCreature!=null) {
             this.currentCreature.kill();
+            this.setCard(null);
         }
     }
 }

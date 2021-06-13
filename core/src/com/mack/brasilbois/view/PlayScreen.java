@@ -31,7 +31,7 @@ import io.socket.emitter.Emitter;
 
 public class PlayScreen implements Screen, InputProcessor {
     //distancia que uma carta precisa estar para as duas interagirem
-
+    boolean drawAssistence = false;
     //in order to access the game.batch
     private BrBoisMain game;
     //loading comons textures
@@ -45,6 +45,7 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Texture atkHolder;
     public static Texture cocaine;
     public static Texture cristo;
+    public static Texture endTurn;
 
     public static Sound porradaSound;
 
@@ -85,7 +86,7 @@ public class PlayScreen implements Screen, InputProcessor {
         atkHolder = new Texture ("Layout/atkHolder.png");
         cocaine = new Texture("Layout/cocaine.png");
         cristo= new Texture("Layout/cristo.png");
-
+        endTurn = new Texture("Layout/endTurn.png");
         //creating the fonts
         boardFont = new BitmapFont(Gdx.files.internal("Fonts/teste.fnt"));
         cardFont = new BitmapFont(Gdx.files.internal("Fonts/cardFontHolder.fnt"));
@@ -97,10 +98,8 @@ public class PlayScreen implements Screen, InputProcessor {
         //generating placeholder deck
         player = new Player(Tests.getTestDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
-
+        //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
-
-
         //set the player that owns that card for all the cards
         enemy.setOwner();
         player.setOwner();
@@ -146,8 +145,13 @@ public class PlayScreen implements Screen, InputProcessor {
         //creatureHolders.printAssitent();
         //draw cards and creatures on the table
         drawBoardPlace();
-        drawBattlefieldAssistant();
+        //tiny dots in the middle of stuff to check its x,y positions easier
+        if (drawAssistence) drawBattlefieldAssistant();
         drawMana();
+
+        game.batch.draw(endTurn, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
+        ,SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
+                SizePositionValues.PASS_TURN_UPPER_Y - SizePositionValues.PASS_TURN_BOTTON_Y);
         //drawing the hp
         boardFont.draw(game.batch, player.getHp(), SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
         boardFont.draw(game.batch, enemy.getHp(), SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
@@ -363,8 +367,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     }
                     break;
             }
-
-
+        currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
         }
     }
 

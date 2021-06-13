@@ -39,7 +39,7 @@ public class CardBuilder {
 
         Texture chicoTexture = new Texture("Card_arts/chico_morto.png");
 
-        CreatureCard deadChico = new CreatureCard("Chico atrapalhando transito", 0, 99,1, Card.Faction.VERMELHA,
+        CreatureCard deadChico = new CreatureCard("Corpo do Chico", 0, 99,1, Card.Faction.VERMELHA,
                 Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);
         deadChico.isSelectable = false;
 

@@ -11,6 +11,8 @@ import com.mack.brasilbois.view.PlayScreen;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.font.CreatedFontTracker;
+
 import static com.mack.brasilbois.view.PlayScreen.currentCard;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
@@ -97,8 +99,11 @@ public class CreatureCard extends Card {
         if(abilities.contains(Ability.ATRAPALHAR_O_TRANSITO)) {
             for (BattleField creatureHolder : enemyCreatureHolders) {
                 if (creatureHolder.getCard() == null ) {
-                    creatureHolder.setCard(CardBuilder.buildChicoBuarqueDead());
-                    break;
+                    CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+                    creatureHolder.setCard(deadChico);
+                    deadChico.setxPos(creatureHolder.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                    deadChico.setyPos(creatureHolder.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                    return;
                 }
 
             }
