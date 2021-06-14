@@ -31,7 +31,7 @@ import io.socket.emitter.Emitter;
 
 public class PlayScreen implements Screen, InputProcessor {
     //distancia que uma carta precisa estar para as duas interagirem
-
+    boolean drawAssistence = false;
     //in order to access the game.batch
     private BrBoisMain game;
     //loading comons textures
@@ -45,6 +45,7 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Texture atkHolder;
     public static Texture cocaine;
     public static Texture cristo;
+    public static Texture endTurn;
 
     public static Sound porradaSound;
 
@@ -71,60 +72,6 @@ public class PlayScreen implements Screen, InputProcessor {
     public static BitmapFont descFont;
 
 
-
-
-
-    private void configSocketForPlay() {
-          connectPlaySocket();
-          configSocketListeners();
-    }
-
-    private void configSocketListeners() {
-        socket.on("enemyCardPlaced", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-
-                String data =  (String) args[0];
-
-                try {
-                    JSONObject json = new JSONObject(data);
-                    Gdx.app.log("SocketIO", "CardPlaced");
-                    Gdx.app.log("cardName & pos: ", data);
-                    placeEnemyCard(json);
-                    printJson(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-    }
-
-    private void printJson(JSONObject json) {
-        Iterator<String> keys = json.keys();
-
-        while(keys.hasNext()) {
-            String key = keys.next();
-            Gdx.app.log("key: ", key);
-            try {
-                Gdx.app.log("value: ",  json.get(key).toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void connectPlaySocket(){
-        try {
-            socket = IO.socket("http://localhost:8080");
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-    //constructor
     public PlayScreen(BrBoisMain game) {
         this.game = game;
         configSocketForPlay();
@@ -139,7 +86,7 @@ public class PlayScreen implements Screen, InputProcessor {
         atkHolder = new Texture ("Layout/atkHolder.png");
         cocaine = new Texture("Layout/cocaine.png");
         cristo= new Texture("Layout/cristo.png");
-
+        endTurn = new Texture("Layout/endTurn.png");
         //creating the fonts
         boardFont = new BitmapFont(Gdx.files.internal("Fonts/teste.fnt"));
         cardFont = new BitmapFont(Gdx.files.internal("Fonts/cardFontHolder.fnt"));
@@ -151,10 +98,8 @@ public class PlayScreen implements Screen, InputProcessor {
         //generating placeholder deck
         player = new Player(Tests.getTestDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
-
+        //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
-
-
         //set the player that owns that card for all the cards
         enemy.setOwner();
         player.setOwner();
@@ -200,8 +145,13 @@ public class PlayScreen implements Screen, InputProcessor {
         //creatureHolders.printAssitent();
         //draw cards and creatures on the table
         drawBoardPlace();
-        drawBattlefieldAssistant();
+        //tiny dots in the middle of stuff to check its x,y positions easier
+        if (drawAssistence) drawBattlefieldAssistant();
         drawMana();
+
+        game.batch.draw(endTurn, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
+        ,SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
+                SizePositionValues.PASS_TURN_UPPER_Y - SizePositionValues.PASS_TURN_BOTTON_Y);
         //drawing the hp
         boardFont.draw(game.batch, player.getHp(), SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
         boardFont.draw(game.batch, enemy.getHp(), SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
@@ -362,7 +312,7 @@ public class PlayScreen implements Screen, InputProcessor {
         System.out.println("y: " + ipsolon);
 
         if (player.isPlaying()) {
-            checkUserInput(mousePos);
+                checkUserInput(mousePos);
 
 
         } else {//enemy Playing
@@ -398,6 +348,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     }
                     if (!wasPlaced) {
                         currentCard.returnToLastPosition();
+
                      //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
                     }
                     break;
@@ -411,10 +362,12 @@ public class PlayScreen implements Screen, InputProcessor {
 
                     //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
                     boolean survived = CardInteractor.checkCardInteractions(mouse);
+                    if(survived) {
+                        currentCard.returnToLastPosition();
+                    }
                     break;
             }
-
-            currentCard = null;
+        currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
         }
     }
 
@@ -432,7 +385,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 b.setCard(currentCreature);
 
                 if(currentCreature.hasDeployAction()){
-                        currentCreature.doDeployAction(creatureHolders);
+                    currentCreature.doDeployAction(creatureHolders);
                 }
                 currentCard.setCurrentPlace(b.getBoardPlace());
 
@@ -445,7 +398,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 currentCreature.setSick(true);
 
                 sendPlaceCardToServer(b, currentCreature);
-
+                currentCard = null; //solta a carta da mao
                 return true;
 
             } else {
@@ -730,7 +683,57 @@ public class PlayScreen implements Screen, InputProcessor {
         return ret;
     }
 
+    private void configSocketForPlay() {
+        connectPlaySocket();
+        configSocketListeners();
+    }
 
+    private void configSocketListeners() {
+        socket.on("enemyCardPlaced", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+
+                String data =  (String) args[0];
+
+                try {
+                    JSONObject json = new JSONObject(data);
+                    Gdx.app.log("SocketIO", "CardPlaced");
+                    Gdx.app.log("cardName & pos: ", data);
+                    placeEnemyCard(json);
+                    printJson(json);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+    }
+
+    private void printJson(JSONObject json) {
+        Iterator<String> keys = json.keys();
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+            Gdx.app.log("key: ", key);
+            try {
+                Gdx.app.log("value: ",  json.get(key).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void connectPlaySocket(){
+        try {
+            socket = IO.socket("http://localhost:8080");
+            socket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+    //constructor
 
 
     //bellow NOTHING REALLY MATTERS
@@ -799,4 +802,7 @@ public class PlayScreen implements Screen, InputProcessor {
         cardFont.dispose();
 
     }
+
+
+
 }
