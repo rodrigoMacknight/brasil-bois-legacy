@@ -98,7 +98,7 @@ public class BrBoisMain extends Game {
     private void connectSocket() {
 
         try {
-            socket = IO.socket("http://localhost:8000");
+            socket = IO.socket("http://54.232.104.27:8080");
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
