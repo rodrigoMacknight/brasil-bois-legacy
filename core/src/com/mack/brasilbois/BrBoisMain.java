@@ -40,8 +40,8 @@ public class BrBoisMain extends Game {
     @Override
     public void create() {
 
-        connectSocket();
-        configSocketEvents();
+        //connectSocket();
+        //configSocketEvents();
         batch = new SpriteBatch();
         //initialize game cards on memory
         allCards = CardBuilder.initializeCards();

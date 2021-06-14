@@ -161,8 +161,11 @@ public class PlayScreen implements Screen, InputProcessor {
 
         if (currentCard != null) {
         //   game.batch.draw(new Texture("coxinha.jpg"), creatureHolders.get(0).getXy().x, creatureHolders.get(0).getXy().y);
-            currentCard.drawWithMana(game.batch);
-
+            if(currentCard.getCurrentPlace().equals(Card.BoardPlace.HAND)) {
+                currentCard.drawWithMana(game.batch);
+            } else {
+                currentCard.drawWithoutMana(game.batch);
+            }
 
     }
 
@@ -727,18 +730,54 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void connectPlaySocket(){
         try {
-            socket = IO.socket("http://localhost:8080");
+            //socket = IO.socket("http://54.232.104.27:8080");
+            socket =  IO.socket("http://localhost:8082");
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
     //constructor
+    private void configSocketEvents() {
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
 
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Connected");
+            }
+        }).on("socketId", new Emitter.Listener(){
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+
+                String id = null;
+                try {
+                    id = data.getString("id");
+                    Gdx.app.log("socketIO", "my id: " + id );
+                } catch (JSONException e) {
+                    Gdx.app.log("socketIO", "error getting ID" );
+                }
+
+            }
+        }).on("newPlayer", new Emitter.Listener(){
+
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                Gdx.app.log("SocketIO", "received event socketId");
+                String id = null;
+                try {
+                    id = data.getString("id");
+                    Gdx.app.log("socketIO", "new player id: " + id );
+                } catch (JSONException e) {
+                    Gdx.app.log("socketIO", "error getting ID" );
+                }
+
+            }
+        });
+    }
 
     //bellow NOTHING REALLY MATTERS
-
-
     @Override
     public void resize(int width, int height) {
 
