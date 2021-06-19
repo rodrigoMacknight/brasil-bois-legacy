@@ -1,11 +1,13 @@
 package com.mack.brasilbois.service;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mack.brasilbois.BrBoisMain;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import sun.font.CreatedFontTracker;
 
@@ -128,5 +130,15 @@ public class CardBuilder {
                 Card.Faction.AZUL,Card.CardType.CRIATURA, Card.Tribo.GENTE_DE_BEM, coxinhaArt,
                 1);
         ret.add(coxinha);
+    }
+
+    public static Card generateCardFromName(final String cardName) {
+//        List<Card> cardFromNameList =
+//                BrBoisMain.allCards.stream().
+//                filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
+//
+//        Card card = cardFromNameList.get(0);
+//        return card;
+        return BrBoisMain.allCards.get(0);
     }
 }

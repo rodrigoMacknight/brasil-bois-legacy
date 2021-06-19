@@ -8,7 +8,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.google.gson.Gson;
 import com.mack.brasilbois.BrBoisMain;
+import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
+import com.mack.brasilbois.service.BattleClient;
+import com.mack.brasilbois.service.CardBuilder;
 import com.mack.brasilbois.service.CardInteractor;
 import com.mack.brasilbois.service.Tests;
 import com.mack.brasilbois.enums.SizePositionValues;
@@ -32,6 +36,8 @@ import io.socket.emitter.Emitter;
 public class PlayScreen implements Screen, InputProcessor {
     //distancia que uma carta precisa estar para as duas interagirem
     boolean drawAssistence = false;
+    //connects to battle server
+    BattleClient battleClient;
     //in order to access the game.batch
     private BrBoisMain game;
     //loading comons textures
@@ -54,7 +60,7 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Vector2 enemyHPPos;
 
 
-    private Socket socket;
+
 
 
     public static Player player;
@@ -374,8 +380,43 @@ public class PlayScreen implements Screen, InputProcessor {
         }
     }
 
-    private void placeEnemyCard(JSONObject json) {
+    public static void placeEnemyCard(String placeCardJson) {
+        Gson gson = new Gson();
+        PlaceCardEvent placeCardEvent = gson.fromJson(placeCardJson, PlaceCardEvent.class);
 
+        //generate card
+        CreatureCard c = (CreatureCard) CardBuilder.generateCardFromName(placeCardEvent.cardName);
+
+
+
+        switch (placeCardEvent.position) {
+            case FIELD_1:
+                enemyCreatureHolders.get(0).setCard(c);
+            case FIELD_2:
+            case FIELD_3:
+            case FIELD_4:
+            case FIELD_5:
+            case FIELD_6:
+        }
+        //enemyCreatureHolders
+//        for (BattleField b : enemyCreatureHolders) {
+//
+//            //if the user tryed to place a card
+//            if (mouse.dst(b.getXy()) < 40) {
+//
+//                if (b.getCard() == null) {
+//                    if(enemy.getCurrentMana()>= currentCard.getManaCost()) {
+//                        wasPlaced = true;
+//                        b.setCard(creature);
+//                        System.out.println("card <" + currentCard.getName() + "> was placed on " + b.getBoardPlace());
+//                        currentCard.setCurrentPlace(b.getBoardPlace());
+//                        currentCard.setxPos(b.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+//                        currentCard.setyPos(b.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+//                        enemy.useMana(currentCard.getManaCost());
+//                    }
+//                }
+//            }
+//        }
 
     }
 
@@ -400,7 +441,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 //seta enjoo de criatura
                 currentCreature.setSick(true);
 
-                sendPlaceCardToServer(b, currentCreature);
+                battleClient.sendPlaceCardToServer(b, currentCreature);
                 currentCard = null; //solta a carta da mao
                 return true;
 
@@ -412,30 +453,7 @@ public class PlayScreen implements Screen, InputProcessor {
         }
     }
 
-    /**
-     *
-     * @param b
-     * @param currentCreature
-     *
-     * Send the data of the card just place to the server.
-     */
-    private void sendPlaceCardToServer(BattleField b, CreatureCard currentCreature) {
-        String position = b.getBoardPlace().name();
-        String cardId = currentCreature.getName();
 
-        try {
-            String jsonString = new JSONObject()
-                    .put("position", position)
-                    .put("cardName", cardId)
-                   .toString();
-            socket.emit("placeCard", jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-
-    }
 
     private void checkEnemyInput( Vector2 mouse) {
 
@@ -677,7 +695,6 @@ public class PlayScreen implements Screen, InputProcessor {
                 Card.BoardPlace.ENEMY_FIELD_5);
         ret.add(five);
 
-
         BattleField six = new BattleField(new Vector2(SizePositionValues.FIELD_ENEMY_CREATURE_SIX_X, SizePositionValues.FIELD_ENEMY_CREATURE_SIX_Y),
                 Card.BoardPlace.ENEMY_FIELD_6);
         ret.add(six);
@@ -687,95 +704,13 @@ public class PlayScreen implements Screen, InputProcessor {
     }
 
     private void configSocketForPlay() {
-        connectPlaySocket();
-        configSocketListeners();
+        battleClient = new BattleClient();
+        battleClient.connectPlaySocket();
+        battleClient.configSocketListeners();
     }
 
-    private void configSocketListeners() {
-        socket.on("enemyCardPlaced", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
 
-                String data =  (String) args[0];
 
-                try {
-                    JSONObject json = new JSONObject(data);
-                    Gdx.app.log("SocketIO", "CardPlaced");
-                    Gdx.app.log("cardName & pos: ", data);
-                    placeEnemyCard(json);
-                    printJson(json);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-    }
-
-    private void printJson(JSONObject json) {
-        Iterator<String> keys = json.keys();
-
-        while(keys.hasNext()) {
-            String key = keys.next();
-            Gdx.app.log("key: ", key);
-            try {
-                Gdx.app.log("value: ",  json.get(key).toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void connectPlaySocket(){
-        try {
-            //socket = IO.socket("http://54.232.104.27:8080");
-            socket =  IO.socket("http://localhost:8082");
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-    //constructor
-    private void configSocketEvents() {
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
-
-            @Override
-            public void call(Object... args) {
-                Gdx.app.log("SocketIO", "Connected");
-            }
-        }).on("socketId", new Emitter.Listener(){
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-
-                String id = null;
-                try {
-                    id = data.getString("id");
-                    Gdx.app.log("socketIO", "my id: " + id );
-                } catch (JSONException e) {
-                    Gdx.app.log("socketIO", "error getting ID" );
-                }
-
-            }
-        }).on("newPlayer", new Emitter.Listener(){
-
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                Gdx.app.log("SocketIO", "received event socketId");
-                String id = null;
-                try {
-                    id = data.getString("id");
-                    Gdx.app.log("socketIO", "new player id: " + id );
-                } catch (JSONException e) {
-                    Gdx.app.log("socketIO", "error getting ID" );
-                }
-
-            }
-        });
-    }
 
     //bellow NOTHING REALLY MATTERS
     @Override
