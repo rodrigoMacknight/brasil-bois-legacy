@@ -5,7 +5,6 @@ import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
-import com.mack.brasilbois.model.Player;
 
 
 import static com.mack.brasilbois.view.PlayScreen.battleClient;
