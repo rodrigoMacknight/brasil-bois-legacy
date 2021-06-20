@@ -320,12 +320,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
         if (player.isPlaying()) {
             checkUserInput(mousePos);
-
-
-        } else {//enemy Playing
-            checkEnemyInput(mousePos);
         }
-
 
         return false;
     }
@@ -447,115 +442,6 @@ public class PlayScreen implements Screen, InputProcessor {
         } else {
             return false;
         }
-    }
-
-
-    private void checkEnemyInput(Vector2 mouse) {
-
-        if (currentCard != null) {
-            boolean wasPlaced = false;
-            //where the card was
-            CreatureCard creature = (CreatureCard) currentCard;
-            switch (currentCard.getCurrentPlace()) {
-                case HAND:
-
-                    for (BattleField b : enemyCreatureHolders) {
-
-                        //if the user tryed to place a card
-                        if (mouse.dst(b.getXy()) < 40) {
-
-                            if (b.getCard() == null) {
-                                if (enemy.getCurrentMana() >= currentCard.getManaCost()) {
-                                    wasPlaced = true;
-                                    b.setCard(creature);
-                                    System.out.println("card <" + currentCard.getName() + "> was placed on " + b.getBoardPlace());
-                                    currentCard.setCurrentPlace(b.getBoardPlace());
-                                    currentCard.setxPos(b.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                                    currentCard.setyPos(b.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
-                                    enemy.useMana(currentCard.getManaCost());
-                                }
-                            }
-                        }
-                    }
-                    if (!wasPlaced) {
-                        currentCard.returnToLastPosition();
-
-                    }
-                    break;
-                case ENEMY_FIELD_1:
-                case ENEMY_FIELD_2:
-                case ENEMY_FIELD_3:
-                case ENEMY_FIELD_4:
-                case ENEMY_FIELD_5:
-                case ENEMY_FIELD_6:
-                    //the card was taken from a friendly battlefield
-                    boolean survived = checkCardInteractions(mouse);
-                    if (survived) {
-                        currentCard.returnToLastPosition();
-                    } else {
-                        //TODO:KILL ANIMATION
-                        currentCard = null;
-                    }
-                    break;
-            }
-
-            currentCard = null;
-        }
-    }
-
-    //the friendly creature was just removed from a battlefield
-    //must see where the user wants to place her and returns a boolean telling
-    //if the card should return to its original position
-    private boolean checkCardInteractions(Vector2 mousePosition) {
-
-        CreatureCard creature = (CreatureCard) currentCard;
-
-        if (creature.isSick()) {
-            //the card cant attack just return her
-            return true;
-        }
-        //se bati no hp do inimigo
-        if (mousePosition.dst(PlayScreen.enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE) {
-            //attacked the player
-            enemy.damage(creature.getAtkTotal());
-            creature.setTargetable(true);
-            creature.fighted = true;
-            return true;
-        }
-        //para cada inimigo no campo do inimigo
-        for (BattleField creatureField : enemyCreatureHolders) {
-
-            //soltei a carta perto de uma criatura inimiga
-            if (mousePosition.dst(creatureField.getXy()) < SizePositionValues.CARD_SNAP_DISTANCE) {
-
-
-                //se tem criatura e a criatura é passivel de ser target
-                //battle!
-                if (creatureField.getCard() != null && creatureField.getCard().isTargetable()) {
-                    creature.damage(creatureField.getCard());
-                    creature.fighted = true;
-                    //se a criatura que defendeu morreu
-                    if (creatureField.getCard().getHealth() <= 0) {
-                        System.out.println("card " + creatureField.getCard().getName() + " died");
-
-                        creatureField.setCard(null);
-                    }
-
-                    //morreu
-                    if (creature.getHealth() <= 0) {
-                        System.out.println("card " + currentCard.getName() + " died");
-
-
-                        return false;
-                    } else {
-                        //it survived the battle
-                        return true;
-                    }
-                }
-            }
-        }
-        //nothing happened, survived
-        return true;
     }
 
 
