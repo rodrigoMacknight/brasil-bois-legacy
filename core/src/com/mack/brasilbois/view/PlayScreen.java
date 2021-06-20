@@ -32,9 +32,9 @@ public class PlayScreen implements Screen, InputProcessor {
     //connects to battle server
     public static BattleClient battleClient;
     //in order to access the game.batch
-    private BrBoisMain game;
+    private final BrBoisMain game;
     //loading comons textures
-    private Texture backGround;
+    private final Texture backGround;
     //reference to the layout of every card
     public static Texture cardBg;
     public static Texture mana;
@@ -62,8 +62,6 @@ public class PlayScreen implements Screen, InputProcessor {
     public static List<BattleField> enemyCreatureHolders;
 
     public static Card currentCard; //holds the card to be dragged and dropped
-
-    int turno;
 
     public static BitmapFont boardFont;
     public static BitmapFont cardFont;
@@ -108,7 +106,7 @@ public class PlayScreen implements Screen, InputProcessor {
         //player.startTurn();
 
         //loads hpMaths
-        playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_X);
+        playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
         enemyHPPos = new Vector2(SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
 
         //create the battlefields for the creatures
@@ -268,8 +266,6 @@ public class PlayScreen implements Screen, InputProcessor {
             checkHandInput(screenX, ypsolon);
             checkBattlefieldInput(screenX, ypsolon);
             checkPassTurn(screenX, ypsolon);
-        } else {//enemy Playing
-            //checkEnemyHandInput(screenX, ypsolon);
         }
         return false;
     }
@@ -324,12 +320,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
         if (player.isPlaying()) {
             checkUserInput(mousePos);
-
-
-        } else {//enemy Playing
-            checkEnemyInput(mousePos);
         }
-
 
         return false;
     }
@@ -454,141 +445,11 @@ public class PlayScreen implements Screen, InputProcessor {
     }
 
 
-    private void checkEnemyInput(Vector2 mouse) {
-
-        if (currentCard != null) {
-            boolean wasPlaced = false;
-            //where the card was
-            CreatureCard creature = (CreatureCard) currentCard;
-            switch (currentCard.getCurrentPlace()) {
-                case HAND:
-
-                    for (BattleField b : enemyCreatureHolders) {
-
-                        //if the user tryed to place a card
-                        if (mouse.dst(b.getXy()) < 40) {
-
-                            if (b.getCard() == null) {
-                                if (enemy.getCurrentMana() >= currentCard.getManaCost()) {
-                                    wasPlaced = true;
-                                    b.setCard(creature);
-                                    System.out.println("card <" + currentCard.getName() + "> was placed on " + b.getBoardPlace());
-                                    currentCard.setCurrentPlace(b.getBoardPlace());
-                                    currentCard.setxPos(b.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                                    currentCard.setyPos(b.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
-                                    enemy.useMana(currentCard.getManaCost());
-                                }
-                            }
-                        }
-                    }
-                    if (!wasPlaced) {
-                        currentCard.returnToLastPosition();
-
-                    }
-                    break;
-                case ENEMY_FIELD_1:
-                case ENEMY_FIELD_2:
-                case ENEMY_FIELD_3:
-                case ENEMY_FIELD_4:
-                case ENEMY_FIELD_5:
-                case ENEMY_FIELD_6:
-                    //the card was taken from a friendly battlefield
-                    boolean survived = checkCardInteractions(mouse);
-                    if (survived) {
-                        currentCard.returnToLastPosition();
-                    } else {
-                        //TODO:KILL ANIMATION
-                        currentCard = null;
-                    }
-                    break;
-            }
-
-            currentCard = null;
-        }
-    }
-
-    //the friendly creature was just removed from a battlefield
-    //must see where the user wants to place her and returns a boolean telling
-    //if the card should return to its original position
-    private boolean checkCardInteractions(Vector2 mousePosition) {
-
-        CreatureCard creature = (CreatureCard) currentCard;
-
-        if (creature.isSick()) {
-            //the card cant attack just return her
-            return true;
-        }
-        //se bati no hp do inimigo
-        if (mousePosition.dst(PlayScreen.enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE) {
-            //attacked the player
-            enemy.damage(creature.getAtkTotal());
-            creature.setTargetable(true);
-            creature.fighted = true;
-            return true;
-        }
-        //para cada inimigo no campo do inimigo
-        for (BattleField creatureField : enemyCreatureHolders) {
-
-            //soltei a carta perto de uma criatura inimiga
-            if (mousePosition.dst(creatureField.getXy()) < SizePositionValues.CARD_SNAP_DISTANCE) {
-
-
-                //se tem criatura e a criatura é passivel de ser target
-                //battle!
-                if (creatureField.getCard() != null && creatureField.getCard().isTargetable()) {
-                    creature.damage(creatureField.getCard());
-                    creature.fighted = true;
-                    //se a criatura que defendeu morreu
-                    if (creatureField.getCard().getHealth() <= 0) {
-                        System.out.println("card " + creatureField.getCard().getName() + " died");
-
-                        creatureField.setCard(null);
-                    }
-
-                    //morreu
-                    if (creature.getHealth() <= 0) {
-                        System.out.println("card " + currentCard.getName() + " died");
-
-
-                        return false;
-                    } else {
-                        //it survived the battle
-                        return true;
-                    }
-                }
-            }
-        }
-        //nothing happened, survived
-        return true;
-    }
-
-
     private void checkHandInput(int screenX, int screenY) {
         boolean handGrabbed = false;
 
-        cardGrabbed:
         for (int i = player.getHand().size() - 1; i >= 0; i--) {
             Card c = player.getHand().get(i);
-            if (c.isClicked(screenX, screenY)) {
-                if (currentCard == null) {
-                    currentCard = c;
-
-                    handGrabbed = true;
-
-                }
-                break cardGrabbed;
-            }
-
-        }
-        if (handGrabbed) {
-            //tira carta da mão
-            player.getHand().remove(currentCard);
-        }
-    }
-
-    private void checkEnemyHandInput(int screenX, int screenY) {
-        boolean handGrabbed = false;
-        for (Card c : enemy.getHand()) {
             if (c.isClicked(screenX, screenY)) {
                 if (currentCard == null) {
                     currentCard = c;
@@ -602,7 +463,7 @@ public class PlayScreen implements Screen, InputProcessor {
         }
         if (handGrabbed) {
             //tira carta da mão
-            enemy.getHand().remove(currentCard);
+            player.getHand().remove(currentCard);
         }
     }
 
@@ -635,15 +496,6 @@ public class PlayScreen implements Screen, InputProcessor {
             }
         }
     }
-
-    private void unsickEnemyBattleFields() {
-        for (BattleField creatureHolder : enemyCreatureHolders) {
-            if (creatureHolder.getCard() != null) {
-                creatureHolder.getCard().setSick(false);
-            }
-        }
-    }
-
 
     public static List<BattleField> getCreatureHolders() {
         return creatureHolders;

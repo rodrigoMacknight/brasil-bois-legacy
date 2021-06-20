@@ -20,16 +20,12 @@ public class Player {
 
     boolean playing = false;
 
-
-    private List<Card> graveYard;
-
     public int totalMana;
     private int currentMana;
 
     public Player(Stack<Card> playerDeck) {
         this.health = INIT_HP;
         this.playerDeck = playerDeck;
-        this.graveYard = null;
         totalMana = 0;
         currentMana = 0;
         hand = new ArrayList<Card>();
@@ -71,7 +67,7 @@ public class Player {
     //draw cards in the grimorio
     public void drawGrimorio(SpriteBatch batch) {
 
-        List<Card> temp = new ArrayList<Card>();
+        List<Card> temp = new ArrayList<>();
         if (!playerDeck.isEmpty()) {
             Card c = playerDeck.peek();
             batch.draw(PlayScreen.cardBack, c.getxPos(), c.getyPos(), c.getCardSprite().getWidth(), c.getCardSprite().getHeight());
