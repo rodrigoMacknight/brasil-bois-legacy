@@ -27,6 +27,8 @@ import java.util.List;
 public class PlayScreen implements Screen, InputProcessor {
     //distancia que uma carta precisa estar para as duas interagirem
     boolean drawAssistence = false;
+
+    public static boolean gameStarted = false;
     //connects to battle server
     public static BattleClient battleClient;
     //in order to access the game.batch
@@ -44,6 +46,8 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Texture cristo;
     public static Texture endTurn;
 
+
+    public static Texture awaitBattle;
     public static Sound porradaSound;
 
 
@@ -71,6 +75,7 @@ public class PlayScreen implements Screen, InputProcessor {
         configSocketForPlay();
 
         //loading comum textures for the game
+        awaitBattle = new Texture("Layout/lulaPhilip.png");
         backGround = new Texture("Layout/NewLayout.png");
         cardBg = new Texture("Layout/newCard.png");
         mana = new Texture("Layout/mana.png");
@@ -100,7 +105,7 @@ public class PlayScreen implements Screen, InputProcessor {
         //initilize player hand
         player.grabCard(5);
         enemy.grabCard(6);
-        player.startTurn();
+        //player.startTurn();
 
         //loads hpMaths
         playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_X);
@@ -111,7 +116,6 @@ public class PlayScreen implements Screen, InputProcessor {
         enemyCreatureHolders = createEnemyCreatureHolders();
 
     }
-
 
     @Override
     public void show() {
@@ -125,8 +129,19 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         game.batch.begin();
+        if(gameStarted) renderBoard();
+        else renderAwaitingForPlayer();
+        game.batch.end();
+
+    }
+
+    private void renderAwaitingForPlayer() {
+        game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+        boardFont.draw(game.batch,"Aguardando outro player", 60 , 60 );
+    }
+
+    private void renderBoard() {
         game.batch.draw(backGround, 0, 0);
 
         player.drawGrimorio(game.batch);
@@ -164,7 +179,6 @@ public class PlayScreen implements Screen, InputProcessor {
         }
 
 
-        game.batch.end();
 
     }
 
@@ -253,10 +267,10 @@ public class PlayScreen implements Screen, InputProcessor {
 
             checkHandInput(screenX, ypsolon);
             checkBattlefieldInput(screenX, ypsolon);
+            checkPassTurn(screenX, ypsolon);
         } else {//enemy Playing
-            checkEnemyHandInput(screenX, ypsolon);
+            //checkEnemyHandInput(screenX, ypsolon);
         }
-      
         return false;
     }
 
@@ -596,12 +610,15 @@ public class PlayScreen implements Screen, InputProcessor {
     private void checkPassTurn(int x, int y) {
         if (x > SizePositionValues.PASS_TURN_LEFT_X && x < SizePositionValues.PASS_TURN_RIGHT_X) {
             if (y > SizePositionValues.PASS_TURN_BOTTON_Y && y < SizePositionValues.PASS_TURN_UPPER_Y) {
+                //send end turn to server
 
                 if (player.isPlaying()) {
+                    battleClient.sendEndTurn();
                     player.setPlaying(false);
-                    enemy.startTurn();
-                    unsickEnemyBattleFields();
-                } else {
+                    enemy.setPlaying(true);
+                    //enemy.startTurn();
+                    //unsickEnemyBattleFields();
+                } else { //TODO: THIS WILL NEVER HAPPEN
                     enemy.setPlaying(false);
                     player.startTurn();
                     unsickBattleFields();
@@ -611,7 +628,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     }
 
-    private void unsickBattleFields() {
+    public static void unsickBattleFields() {
         for (BattleField creatureHolder : creatureHolders) {
             if (creatureHolder.getCard() != null) {
                 creatureHolder.getCard().setSick(false);
