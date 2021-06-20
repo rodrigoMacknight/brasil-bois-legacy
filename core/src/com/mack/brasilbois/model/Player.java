@@ -23,7 +23,7 @@ public class Player {
 
     private List<Card> graveYard;
 
-    private int totalMana;
+    public int totalMana;
     private int currentMana;
 
     public Player(Stack<Card> playerDeck) {
@@ -93,7 +93,7 @@ public class Player {
                 c.setxPos(SizePositionValues.FRIENDLY_HAND_X + offset - (hand.size() * cardSize));
                 c.setyPos(SizePositionValues.FRIENDLY_HAND_Y);
 
-                c.drawWithMana(batch);
+                c.drawCardWithMana(batch);
             }
         }
     }
@@ -152,6 +152,7 @@ public class Player {
 
     public void startTurn() {
         //limite de 10 cartas na mão
+        PlayScreen.unsickBattleFields();
         if (hand.size() < 10) {
             pickCard();
         } else {
@@ -168,10 +169,6 @@ public class Player {
             //restarta o mana pool
             currentMana = totalMana;
         }
-
-
-
-
     }
 
     public CharSequence getHp() {

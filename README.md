@@ -14,3 +14,9 @@ Server
 - Import into intellij
 - Set android assets as resource source
 - play desktop version
+
+
+# prioridades
+- fazer dois clientes se ccomunicarem
+- criar cartas de varias racas (azul, vermelho, verde-amarelo)
+- refatorar codigo

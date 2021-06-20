@@ -19,7 +19,9 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-
+//		config.width= BrBoisMain.WIDTH;
+//		config.height= BrBoisMain.HEIGHT;
+//		config.title = BrBoisMain.TITLE;
 
 		initialize(new BrBoisMain(), config);
 	}
