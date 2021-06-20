@@ -32,9 +32,9 @@ public class PlayScreen implements Screen, InputProcessor {
     //connects to battle server
     public static BattleClient battleClient;
     //in order to access the game.batch
-    private BrBoisMain game;
+    private final BrBoisMain game;
     //loading comons textures
-    private Texture backGround;
+    private final Texture backGround;
     //reference to the layout of every card
     public static Texture cardBg;
     public static Texture mana;
@@ -62,8 +62,6 @@ public class PlayScreen implements Screen, InputProcessor {
     public static List<BattleField> enemyCreatureHolders;
 
     public static Card currentCard; //holds the card to be dragged and dropped
-
-    int turno;
 
     public static BitmapFont boardFont;
     public static BitmapFont cardFont;
@@ -108,7 +106,7 @@ public class PlayScreen implements Screen, InputProcessor {
         //player.startTurn();
 
         //loads hpMaths
-        playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_X);
+        playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
         enemyHPPos = new Vector2(SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
 
         //create the battlefields for the creatures
@@ -268,8 +266,6 @@ public class PlayScreen implements Screen, InputProcessor {
             checkHandInput(screenX, ypsolon);
             checkBattlefieldInput(screenX, ypsolon);
             checkPassTurn(screenX, ypsolon);
-        } else {//enemy Playing
-            //checkEnemyHandInput(screenX, ypsolon);
         }
         return false;
     }
@@ -566,29 +562,8 @@ public class PlayScreen implements Screen, InputProcessor {
     private void checkHandInput(int screenX, int screenY) {
         boolean handGrabbed = false;
 
-        cardGrabbed:
         for (int i = player.getHand().size() - 1; i >= 0; i--) {
             Card c = player.getHand().get(i);
-            if (c.isClicked(screenX, screenY)) {
-                if (currentCard == null) {
-                    currentCard = c;
-
-                    handGrabbed = true;
-
-                }
-                break cardGrabbed;
-            }
-
-        }
-        if (handGrabbed) {
-            //tira carta da mão
-            player.getHand().remove(currentCard);
-        }
-    }
-
-    private void checkEnemyHandInput(int screenX, int screenY) {
-        boolean handGrabbed = false;
-        for (Card c : enemy.getHand()) {
             if (c.isClicked(screenX, screenY)) {
                 if (currentCard == null) {
                     currentCard = c;
@@ -602,7 +577,7 @@ public class PlayScreen implements Screen, InputProcessor {
         }
         if (handGrabbed) {
             //tira carta da mão
-            enemy.getHand().remove(currentCard);
+            player.getHand().remove(currentCard);
         }
     }
 
@@ -635,15 +610,6 @@ public class PlayScreen implements Screen, InputProcessor {
             }
         }
     }
-
-    private void unsickEnemyBattleFields() {
-        for (BattleField creatureHolder : enemyCreatureHolders) {
-            if (creatureHolder.getCard() != null) {
-                creatureHolder.getCard().setSick(false);
-            }
-        }
-    }
-
 
     public static List<BattleField> getCreatureHolders() {
         return creatureHolders;

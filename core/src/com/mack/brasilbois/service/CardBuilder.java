@@ -137,7 +137,7 @@ public class CardBuilder {
                 BrBoisMain.allCards.stream().
                 filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
 
-        Card card = cardFromNameList.get(0);
+        Card card = cardFromNameList.get(0).getCopy();
         return card;
     }
 }
