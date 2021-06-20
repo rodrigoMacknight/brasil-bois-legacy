@@ -54,7 +54,7 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Player player;
     public static Player enemy;
 
-    private static List<BattleField> creatureHolders;
+    public static List<BattleField> creatureHolders;
     public static List<BattleField> enemyCreatureHolders;
 
     public static Card currentCard; //holds the card to be dragged and dropped
@@ -256,7 +256,7 @@ public class PlayScreen implements Screen, InputProcessor {
         } else {//enemy Playing
             checkEnemyHandInput(screenX, ypsolon);
         }
-        checkPassTurn(screenX, ypsolon);
+      
         return false;
     }
 
@@ -373,43 +373,37 @@ public class PlayScreen implements Screen, InputProcessor {
         PlaceCardEvent placeCardEvent = gson.fromJson(placeCardJson, PlaceCardEvent.class);
 
         //generate card
-        CreatureCard c = (CreatureCard) CardBuilder.generateCardFromName(placeCardEvent.cardName);
+        CreatureCard creatureToPlace = (CreatureCard) CardBuilder.generateCardFromName(placeCardEvent.cardName);
 
 
         switch (placeCardEvent.position) {
             case FIELD_1:
-                enemyCreatureHolders.get(0).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(0).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(0).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 5);
                 break;
             case FIELD_2:
-                enemyCreatureHolders.get(1).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(1).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(1).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 4);
                 break;
             case FIELD_3:
-                enemyCreatureHolders.get(2).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(2).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(2).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 3);
                 break;
             case FIELD_4:
-                enemyCreatureHolders.get(3).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(3).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(3).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 2);
                 break;
             case FIELD_5:
-                enemyCreatureHolders.get(4).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(4).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(4).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 1);
                 break;
             case FIELD_6:
-                enemyCreatureHolders.get(5).setCard(c);
-                c.setxPos(enemyCreatureHolders.get(5).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                c.setyPos(enemyCreatureHolders.get(4).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                placeCardOnField(creatureToPlace, 0);
                 break;
         }
-        enemy.useMana(c.getManaCost());
+        enemy.useMana(creatureToPlace.getManaCost());
 
+    }
+
+    private static void placeCardOnField(CreatureCard c, int where) {
+        enemyCreatureHolders.get(where).setCard(c);
+        c.setxPos(enemyCreatureHolders.get(where).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+        c.setyPos(enemyCreatureHolders.get(where).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
     }
 
     private boolean placeCard(BattleField b) {

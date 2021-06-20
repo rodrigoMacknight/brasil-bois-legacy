@@ -54,6 +54,8 @@ public class CardInteractor {
                     //se tem criatura e a criatura é passivel de ser target
                     //battle!
                     if (enemyCreatureField.getCard() != null && enemyCreatureField.getCard().isTargetable()) {
+
+                        battleClient.sendAttackEnemyCreature(currentCard.getCurrentPlace(), enemyCreatureField.getBoardPlace());
                         playHitEffect();
                         //da dano
                         creature.damage(enemyCreatureField.getCard());
@@ -91,5 +93,23 @@ public class CardInteractor {
 
     }
 
+    //battle two cards
+    public static void battleTheseCards(CreatureCard friendlyCreature, CreatureCard enemyCreature) {
+        playHitEffect();
+        enemyCreature.damage(friendlyCreature);
+        enemyCreature.fighted = true;
+        //se a criatura que defendeu morreu
+        if(enemyCreature.getHealth()<=0){
+            System.out.println("card "+ enemyCreature.getName() +  " died");
 
+            enemyCreature.kill();
+        }
+
+        //se a criatura atacante morreu
+        if(friendlyCreature.getHealth()<=0){
+            System.out.println("card "+ currentCard.getName() +  " died");
+            friendlyCreature.kill();
+
+        }
+    }
 }

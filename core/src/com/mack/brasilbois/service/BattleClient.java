@@ -2,10 +2,11 @@ package com.mack.brasilbois.service;
 
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.Player;
+import com.mack.brasilbois.model.eventsMapper.CreatureBattleEvent;
 import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
 import com.mack.brasilbois.utils.PlayerEventsExchanger;
 import com.mack.brasilbois.view.PlayScreen;
@@ -19,7 +20,6 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-import static com.mack.brasilbois.view.PlayScreen.enemy;
 import static com.mack.brasilbois.view.PlayScreen.player;
 
     public class BattleClient {
@@ -78,6 +78,7 @@ import static com.mack.brasilbois.view.PlayScreen.player;
     }
 
 
+
     /**
      *
      * @param b
@@ -95,6 +96,19 @@ import static com.mack.brasilbois.view.PlayScreen.player;
                     .put("cardName", cardId)
                     .toString();
             socket.emit("placeCard", jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void sendAttackEnemyCreature(Card.BoardPlace friendlyBoard, Card.BoardPlace enemyBoard) {
+        try {
+            String jsonString = new JSONObject()
+                    .put("friendlyBoard", friendlyBoard.name())
+                    .put("enemyBoardPlace", enemyBoard.name())
+                    .toString();
+            socket.emit("attackCreature", jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -177,6 +191,14 @@ import static com.mack.brasilbois.view.PlayScreen.player;
             }
         });
 
+        socket.on("enemyAttackedCreature", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String data =  (String) args[0];
+                handleBattle(data);
+            }
+        });
+
 
 
     }
@@ -185,11 +207,35 @@ import static com.mack.brasilbois.view.PlayScreen.player;
         Gson gson = new Gson();
         PlaceCardEvent place = gson.fromJson(data,PlaceCardEvent.class);
 
-        CreatureCard creature = PlayerEventsExchanger.getCreatureCardAt( PlayerEventsExchanger.getMirrorBattleField(place.position));
+        CreatureCard creature = PlayerEventsExchanger.getEnemyCreatureCardAt( PlayerEventsExchanger.getMirrorBattleField(place.position));
         //TODO: CARD ANIMATION
         creature.attackingAnimation = 120;
         CardInteractor.playHitEffect();
         player.damage(creature.getAtkTotal());
 
     }
-}
+
+        private void handleBattle(String battleEvent) {
+            Gson gson = new Gson();
+            CreatureBattleEvent place = gson.fromJson(battleEvent,CreatureBattleEvent.class);
+            //in the event send the enemy is the friend from this player
+            Card.BoardPlace aux = place.enemyBoardPlace;
+            place.enemyBoardPlace = PlayerEventsExchanger.getMirrorBattleField(place.friendlyBoard);
+            place.friendlyBoard = PlayerEventsExchanger.getMirrorBattleField(aux);
+
+            CreatureCard friendlyCreature = PlayerEventsExchanger.getFriendlyCreatureCardAt
+                    (place.friendlyBoard);
+
+
+            CreatureCard enemyCreature =  PlayerEventsExchanger.getEnemyCreatureCardAt
+                    (place.enemyBoardPlace);
+
+            //TODO: CARD ANIMATION
+            CardInteractor.battleTheseCards(friendlyCreature, enemyCreature);
+
+
+        }
+
+
+
+    }
