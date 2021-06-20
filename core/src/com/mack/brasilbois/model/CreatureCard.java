@@ -11,9 +11,6 @@ import com.mack.brasilbois.view.PlayScreen;
 import java.util.ArrayList;
 import java.util.List;
 
-import sun.font.CreatedFontTracker;
-
-import static com.mack.brasilbois.view.PlayScreen.currentCard;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
 public class CreatureCard extends Card {
@@ -37,6 +34,8 @@ public class CreatureCard extends Card {
     public void setAtkBonus(int bonus){
         attackBonus = bonus;
     }
+
+    public int attackingAnimation = 0;
 
 
     public boolean fighted;
@@ -250,8 +249,8 @@ public class CreatureCard extends Card {
         }
     }
     @Override
-    public void drawWithMana(SpriteBatch batch) {
-        drawWithoutMana(batch);
+    public void drawCardWithMana(SpriteBatch batch) {
+        drawCardWithoutMana(batch);
         //draw mana cost
         batch.draw(PlayScreen.manaCost, this.getxPos() + SizePositionValues.CARD_MANACOST_X, this.getyPos() + SizePositionValues.CARD_MANACOST_Y);
         PlayScreen.cardFont.draw(batch, this.getManaCost() + "", this.getxPos() + SizePositionValues.CARD_MANACOST_X + 5, this.getyPos() + SizePositionValues.CARD_MANACOST_Y + 25);
@@ -261,12 +260,20 @@ public class CreatureCard extends Card {
 
 
     @Override
-    public void drawWithoutMana(SpriteBatch batch) {
+    public void drawCardWithoutMana(SpriteBatch batch) {
+        //System.out.println("drawCard" + this.getName());
 
+        if (attackingAnimation>0) {
+            Color c =  batch.getColor();
+            attackingAnimation--;
+
+            float gb = (float)1/attackingAnimation;
+            batch.setColor(c.r,gb,(float)gb,1f);
+        }
 
         if(!this.targetable){
             Color c =  batch.getColor();
-            batch.setColor(c.r,c.g,c.b,0.6f);
+            batch.setColor(c.r,c.g,c.b,0.4f);
         }
 
 
@@ -287,10 +294,13 @@ public class CreatureCard extends Card {
         if(cardStatus.size()>0) {
             drawStatus(batch);
         }
+        //is atacking
+
+
         //if card is stealth reduce alpha
-        if(!this.targetable){
+        if(true){
             Color c =  batch.getColor();
-            batch.setColor(c.r,c.g,c.b,1f);
+            batch.setColor(1,1,1,1f);
         }
 
     }

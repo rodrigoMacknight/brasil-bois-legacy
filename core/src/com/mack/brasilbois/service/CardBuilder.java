@@ -133,12 +133,11 @@ public class CardBuilder {
     }
 
     public static Card generateCardFromName(final String cardName) {
-//        List<Card> cardFromNameList =
-//                BrBoisMain.allCards.stream().
-//                filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
-//
-//        Card card = cardFromNameList.get(0);
-//        return card;
-        return BrBoisMain.allCards.get(0);
+        List<Card> cardFromNameList =
+                BrBoisMain.allCards.stream().
+                filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
+
+        Card card = cardFromNameList.get(0);
+        return card;
     }
 }

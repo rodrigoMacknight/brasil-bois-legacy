@@ -21,23 +21,14 @@ import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
 import com.mack.brasilbois.model.Player;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class PlayScreen implements Screen, InputProcessor {
     //distancia que uma carta precisa estar para as duas interagirem
     boolean drawAssistence = false;
     //connects to battle server
-    BattleClient battleClient;
+    public static BattleClient battleClient;
     //in order to access the game.batch
     private BrBoisMain game;
     //loading comons textures
@@ -58,9 +49,6 @@ public class PlayScreen implements Screen, InputProcessor {
 
     public static Vector2 playerHPPos;
     public static Vector2 enemyHPPos;
-
-
-
 
 
     public static Player player;
@@ -89,9 +77,9 @@ public class PlayScreen implements Screen, InputProcessor {
         emptyMana = new Texture("Layout/emptyMana.png");
         cardBack = new Texture("Layout/cardback.png");
         manaCost = new Texture("Layout/manaCost.png");
-        atkHolder = new Texture ("Layout/atkHolder.png");
+        atkHolder = new Texture("Layout/atkHolder.png");
         cocaine = new Texture("Layout/cocaine.png");
-        cristo= new Texture("Layout/cristo.png");
+        cristo = new Texture("Layout/cristo.png");
         endTurn = new Texture("Layout/endTurn.png");
         //creating the fonts
         boardFont = new BitmapFont(Gdx.files.internal("Fonts/teste.fnt"));
@@ -156,7 +144,7 @@ public class PlayScreen implements Screen, InputProcessor {
         drawMana();
 
         game.batch.draw(endTurn, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
-        ,SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
+                , SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
                 SizePositionValues.PASS_TURN_UPPER_Y - SizePositionValues.PASS_TURN_BOTTON_Y);
         //drawing the hp
         boardFont.draw(game.batch, player.getHp(), SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
@@ -166,19 +154,19 @@ public class PlayScreen implements Screen, InputProcessor {
         boardFont.draw(game.batch, enemy.getDeck().size() + "", SizePositionValues.ENEMY_CARD_COUNTER_X, SizePositionValues.ENEMY_CARD_COUNTER_Y);
 
         if (currentCard != null) {
-        //   game.batch.draw(new Texture("coxinha.jpg"), creatureHolders.get(0).getXy().x, creatureHolders.get(0).getXy().y);
-            if(currentCard.getCurrentPlace().equals(Card.BoardPlace.HAND)) {
-                currentCard.drawWithMana(game.batch);
+            //   game.batch.draw(new Texture("coxinha.jpg"), creatureHolders.get(0).getXy().x, creatureHolders.get(0).getXy().y);
+            if (currentCard.getCurrentPlace().equals(Card.BoardPlace.HAND)) {
+                currentCard.drawCardWithMana(game.batch);
             } else {
-                currentCard.drawWithoutMana(game.batch);
+                currentCard.drawCardWithoutMana(game.batch);
             }
 
-    }
+        }
 
 
         game.batch.end();
 
-}
+    }
 
     private void drawMana() {
 
@@ -236,19 +224,19 @@ public class PlayScreen implements Screen, InputProcessor {
         for (BattleField battleField : creatureHolders) {
             Card c = battleField.getCard();
             if (c != null) {
-                c.drawWithoutMana(game.batch);
-               // game.batch.draw(PlayScreen.cardBg, c.getxPos(), c.getyPos(), Values.CARD_SIZE_X, Values.CARD_SIZE_Y);
+                c.drawCardWithoutMana(game.batch);
+                // game.batch.draw(PlayScreen.cardBg, c.getxPos(), c.getyPos(), Values.CARD_SIZE_X, Values.CARD_SIZE_Y);
                 //game.batch.draw(c.getCardArt(), c.getxPos() + Values.THUMBNAIL_OFFSET_X, c.getyPos() + Values.THUMBNAIL_OFFSET_Y, Values.THUMBNAIL_SIZE_X, Values.THUMBNAIL_SIZE_Y);
 
 
-        }
+            }
         }
         for (BattleField battleField : enemyCreatureHolders) {
             Card c = battleField.getCard();
             if (c != null) {
                 //game.batch.draw(PlayScreen.cardBg, c.getxPos(), c.getyPos(), Values.CARD_SIZE_X, Values.CARD_SIZE_Y);
                 //game.batch.draw(c.getCardArt(), c.getxPos() + Values.THUMBNAIL_OFFSET_X, c.getyPos() + Values.THUMBNAIL_OFFSET_Y, Values.THUMBNAIL_SIZE_X, Values.THUMBNAIL_SIZE_Y);
-                c.drawWithoutMana(game.batch);
+                c.drawCardWithoutMana(game.batch);
             }
         }
     }
@@ -279,16 +267,16 @@ public class PlayScreen implements Screen, InputProcessor {
             if (creatureHolder.getCard() != null) {
 
                 float x = creatureHolder.getXy().x;
-                    float y = creatureHolder.getXy().y;
-                    //if player clicks on the card on that battlefield
-                    if (screenX > (x - (SizePositionValues.CARD_SIZE_X / 2)) && screenX < x + (SizePositionValues.CARD_SIZE_X / 2)) {
-                        if (ypsolon > y - (SizePositionValues.CARD_SIZE_Y / 2) && ypsolon < y + (SizePositionValues.CARD_SIZE_Y / 2)) {
-                            //player got the card on that field
-                            currentCard = creatureHolder.getCard();
-                     //       System.out.println("card <" + current.getName() + "> removed from " + current.getCurrentPlace());
-                            creatureHolder.setCard(null);
-                            break;
-                        }
+                float y = creatureHolder.getXy().y;
+                //if player clicks on the card on that battlefield
+                if (screenX > (x - (SizePositionValues.CARD_SIZE_X / 2)) && screenX < x + (SizePositionValues.CARD_SIZE_X / 2)) {
+                    if (ypsolon > y - (SizePositionValues.CARD_SIZE_Y / 2) && ypsolon < y + (SizePositionValues.CARD_SIZE_Y / 2)) {
+                        //player got the card on that field
+                        currentCard = creatureHolder.getCard();
+                        //       System.out.println("card <" + current.getName() + "> removed from " + current.getCurrentPlace());
+                        creatureHolder.setCard(null);
+                        break;
+                    }
                 }
 
             }
@@ -321,7 +309,7 @@ public class PlayScreen implements Screen, InputProcessor {
         System.out.println("y: " + ipsolon);
 
         if (player.isPlaying()) {
-                checkUserInput(mousePos);
+            checkUserInput(mousePos);
 
 
         } else {//enemy Playing
@@ -332,13 +320,13 @@ public class PlayScreen implements Screen, InputProcessor {
         return false;
     }
 
-    private void checkUserInput(Vector2 mouse ) {
+    private void checkUserInput(Vector2 mouse) {
 
         if (currentCard != null) {
 
             boolean wasPlaced = false;
             //where the card was
-        //    System.out.println("card " + current.getName() +  " is on " + current.getCurrentPlace());
+            //    System.out.println("card " + current.getName() +  " is on " + current.getCurrentPlace());
 
             switch (currentCard.getCurrentPlace()) {
                 //if the card was in the hand and is a  creature type
@@ -349,7 +337,7 @@ public class PlayScreen implements Screen, InputProcessor {
                         //if the user tryed to place a card
                         if (mouse.dst(b.getXy()) < 65) {
                             //se nao tinha carta antes
-                            if (b.getCard() == null){
+                            if (b.getCard() == null) {
                                 wasPlaced = placeCard(b);
                                 break;
                             }
@@ -358,7 +346,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     if (!wasPlaced) {
                         currentCard.returnToLastPosition();
 
-                     //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
+                        //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
                     }
                     break;
                 case FIELD_1:
@@ -371,12 +359,12 @@ public class PlayScreen implements Screen, InputProcessor {
 
                     //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
                     boolean survived = CardInteractor.checkCardInteractions(mouse);
-                    if(survived) {
+                    if (survived) {
                         currentCard.returnToLastPosition();
                     }
                     break;
             }
-        currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
+            currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
         }
     }
 
@@ -388,47 +376,51 @@ public class PlayScreen implements Screen, InputProcessor {
         CreatureCard c = (CreatureCard) CardBuilder.generateCardFromName(placeCardEvent.cardName);
 
 
-
         switch (placeCardEvent.position) {
             case FIELD_1:
                 enemyCreatureHolders.get(0).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(0).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(0).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
             case FIELD_2:
+                enemyCreatureHolders.get(1).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(1).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(1).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
             case FIELD_3:
+                enemyCreatureHolders.get(2).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(2).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(2).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
             case FIELD_4:
+                enemyCreatureHolders.get(3).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(3).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(3).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
             case FIELD_5:
+                enemyCreatureHolders.get(4).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(4).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(4).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
             case FIELD_6:
+                enemyCreatureHolders.get(5).setCard(c);
+                c.setxPos(enemyCreatureHolders.get(5).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                c.setyPos(enemyCreatureHolders.get(4).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                break;
         }
-        //enemyCreatureHolders
-//        for (BattleField b : enemyCreatureHolders) {
-//
-//            //if the user tryed to place a card
-//            if (mouse.dst(b.getXy()) < 40) {
-//
-//                if (b.getCard() == null) {
-//                    if(enemy.getCurrentMana()>= currentCard.getManaCost()) {
-//                        wasPlaced = true;
-//                        b.setCard(creature);
-//                        System.out.println("card <" + currentCard.getName() + "> was placed on " + b.getBoardPlace());
-//                        currentCard.setCurrentPlace(b.getBoardPlace());
-//                        currentCard.setxPos(b.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-//                        currentCard.setyPos(b.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
-//                        enemy.useMana(currentCard.getManaCost());
-//                    }
-//                }
-//            }
-//        }
+        enemy.useMana(c.getManaCost());
 
     }
 
-    private boolean placeCard( BattleField b) {
-        if(currentCard instanceof CreatureCard) {
+    private boolean placeCard(BattleField b) {
+        if (currentCard instanceof CreatureCard) {
             CreatureCard currentCreature = (CreatureCard) currentCard;
             //check if card mana cost higher than my mana cost
             if (player.getCurrentMana() >= currentCard.getManaCost()) {
 
                 b.setCard(currentCreature);
 
-                if(currentCreature.hasDeployAction()){
+                if (currentCreature.hasDeployAction()) {
                     currentCreature.doDeployAction(creatureHolders);
                 }
                 currentCard.setCurrentPlace(b.getBoardPlace());
@@ -448,14 +440,13 @@ public class PlayScreen implements Screen, InputProcessor {
             } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
 
 
-
-    private void checkEnemyInput( Vector2 mouse) {
+    private void checkEnemyInput(Vector2 mouse) {
 
         if (currentCard != null) {
             boolean wasPlaced = false;
@@ -470,7 +461,7 @@ public class PlayScreen implements Screen, InputProcessor {
                         if (mouse.dst(b.getXy()) < 40) {
 
                             if (b.getCard() == null) {
-                                if(enemy.getCurrentMana()>= currentCard.getManaCost()) {
+                                if (enemy.getCurrentMana() >= currentCard.getManaCost()) {
                                     wasPlaced = true;
                                     b.setCard(creature);
                                     System.out.println("card <" + currentCard.getName() + "> was placed on " + b.getBoardPlace());
@@ -497,7 +488,7 @@ public class PlayScreen implements Screen, InputProcessor {
                     boolean survived = checkCardInteractions(mouse);
                     if (survived) {
                         currentCard.returnToLastPosition();
-                    }else{
+                    } else {
                         //TODO:KILL ANIMATION
                         currentCard = null;
                     }
@@ -515,17 +506,17 @@ public class PlayScreen implements Screen, InputProcessor {
 
         CreatureCard creature = (CreatureCard) currentCard;
 
-        if(creature.isSick()){
+        if (creature.isSick()) {
             //the card cant attack just return her
             return true;
         }
         //se bati no hp do inimigo
-        if(mousePosition.dst(PlayScreen.enemyHPPos)<SizePositionValues.CARD_SNAP_DISTANCE){
+        if (mousePosition.dst(PlayScreen.enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE) {
             //attacked the player
             enemy.damage(creature.getAtkTotal());
             creature.setTargetable(true);
             creature.fighted = true;
-            return  true;
+            return true;
         }
         //para cada inimigo no campo do inimigo
         for (BattleField creatureField : enemyCreatureHolders) {
@@ -540,27 +531,27 @@ public class PlayScreen implements Screen, InputProcessor {
                     creature.damage(creatureField.getCard());
                     creature.fighted = true;
                     //se a criatura que defendeu morreu
-                    if(creatureField.getCard().getHealth()<=0){
-                        System.out.println("card "+ creatureField.getCard().getName() +  " died");
+                    if (creatureField.getCard().getHealth() <= 0) {
+                        System.out.println("card " + creatureField.getCard().getName() + " died");
 
                         creatureField.setCard(null);
                     }
 
                     //morreu
-                    if(creature.getHealth()<=0){
-                        System.out.println("card "+ currentCard.getName() +  " died");
+                    if (creature.getHealth() <= 0) {
+                        System.out.println("card " + currentCard.getName() + " died");
 
 
                         return false;
-                    }else{
+                    } else {
                         //it survived the battle
                         return true;
                     }
                 }
             }
         }
-    //nothing happened, survived
-    return true;
+        //nothing happened, survived
+        return true;
     }
 
 
@@ -568,7 +559,7 @@ public class PlayScreen implements Screen, InputProcessor {
         boolean handGrabbed = false;
 
         cardGrabbed:
-        for (int i = player.getHand().size()-1; i>=0; i--){
+        for (int i = player.getHand().size() - 1; i >= 0; i--) {
             Card c = player.getHand().get(i);
             if (c.isClicked(screenX, screenY)) {
                 if (currentCard == null) {
@@ -628,7 +619,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void unsickBattleFields() {
         for (BattleField creatureHolder : creatureHolders) {
-            if(creatureHolder.getCard()!=null ){
+            if (creatureHolder.getCard() != null) {
                 creatureHolder.getCard().setSick(false);
             }
         }
@@ -636,7 +627,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void unsickEnemyBattleFields() {
         for (BattleField creatureHolder : enemyCreatureHolders) {
-            if(creatureHolder.getCard()!=null ){
+            if (creatureHolder.getCard() != null) {
                 creatureHolder.getCard().setSick(false);
             }
         }
@@ -710,8 +701,6 @@ public class PlayScreen implements Screen, InputProcessor {
     }
 
 
-
-
     //bellow NOTHING REALLY MATTERS
     @Override
     public void resize(int width, int height) {
@@ -776,7 +765,6 @@ public class PlayScreen implements Screen, InputProcessor {
         cardFont.dispose();
 
     }
-
 
 
 }

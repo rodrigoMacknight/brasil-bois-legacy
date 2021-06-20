@@ -93,7 +93,7 @@ public class Player {
                 c.setxPos(SizePositionValues.FRIENDLY_HAND_X + offset - (hand.size() * cardSize));
                 c.setyPos(SizePositionValues.FRIENDLY_HAND_Y);
 
-                c.drawWithMana(batch);
+                c.drawCardWithMana(batch);
             }
         }
     }

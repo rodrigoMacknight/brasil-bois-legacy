@@ -1,8 +1,13 @@
 package com.mack.brasilbois.service;
 
 import com.badlogic.gdx.Gdx;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mack.brasilbois.model.BattleField;
+import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
+import com.mack.brasilbois.utils.PlayerEventsExchanger;
 import com.mack.brasilbois.view.PlayScreen;
 
 import org.json.JSONException;
@@ -14,15 +19,20 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class BattleClient {
+import static com.mack.brasilbois.view.PlayScreen.enemy;
+import static com.mack.brasilbois.view.PlayScreen.player;
+
+    public class BattleClient {
 
     private Socket socket;
 
     public void connectPlaySocket(){
         try {
             //socket = IO.socket("http://54.232.104.27:8080");
-            socket =  IO.socket("http://localhost:8080");
-            socket.connect();
+            if (socket==null) {
+                socket = IO.socket("http://localhost:8080");
+                socket.connect();
+            }
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -91,6 +101,21 @@ public class BattleClient {
 
     }
 
+
+    public void sendAttackEnemyHP(String position) {
+        try {
+            String jsonString = new JSONObject()
+                    .put("position", position)
+                    .toString();
+            socket.emit("attackHp", jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
     public void configSocketListeners() {
         socket.on("enemyCardPlaced", new Emitter.Listener() {
             @Override
@@ -98,13 +123,73 @@ public class BattleClient {
 
                 String data =  (String) args[0];
                 //JSONObject json = new JSONObject(data);
-                Gdx.app.log("SocketIO", "CardPlaced");
+                Gdx.app.log("SocketIO", "EnemyCardPlaced");
                 Gdx.app.log("cardName & pos: ", data);
                 PlayScreen.placeEnemyCard(data);
                 //printJson(json);
 
             }
         });
+
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("socketIo", "Connected");
+            }
+        });
+
+        socket.on("socketId", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                System.out.println("alo");
+                JSONObject data = (JSONObject) args[0];
+                String id  = null;
+                try {
+                    id = data.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Gdx.app.log("socketIo", "my id:" + id);
+            }
+        });
+
+
+        socket.on("newPlayer", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                String id  = null;
+                try {
+                    id = data.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Gdx.app.log("socketIo", "new player connected:" + id);
+            }
+        });
+
+        socket.on("enemyAttackedHp", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String data =  (String) args[0];
+
+                handleEnemyDmg(data);
+            }
+        });
+
+
+
+    }
+
+    private void handleEnemyDmg(String data) {
+        Gson gson = new Gson();
+        PlaceCardEvent place = gson.fromJson(data,PlaceCardEvent.class);
+
+        CreatureCard creature = PlayerEventsExchanger.getCreatureCardAt( PlayerEventsExchanger.getMirrorBattleField(place.position));
+        //TODO: CARD ANIMATION
+        creature.attackingAnimation = 120;
+        CardInteractor.playHitEffect();
+        player.damage(creature.getAtkTotal());
 
     }
 }

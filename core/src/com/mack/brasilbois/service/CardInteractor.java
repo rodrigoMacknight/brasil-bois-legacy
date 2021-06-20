@@ -8,11 +8,13 @@ import com.mack.brasilbois.model.CreatureCard;
 import com.mack.brasilbois.model.Player;
 
 
+import static com.mack.brasilbois.view.PlayScreen.battleClient;
 import static com.mack.brasilbois.view.PlayScreen.currentCard;
 import static com.mack.brasilbois.view.PlayScreen.enemy;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 import static com.mack.brasilbois.view.PlayScreen.enemyHPPos;
 import static com.mack.brasilbois.view.PlayScreen.porradaSound;
+
 
 import java.util.List;
 
@@ -35,8 +37,11 @@ public class CardInteractor {
             if(mousePosition.dst(enemyHPPos)< SizePositionValues.CARD_SNAP_DISTANCE){
                 //attacked the player
                 enemy.damage(creature.getAtkTotal());
+                //se estava steahlth tira
                 creature.setTargetable(true);
                 creature.fighted = true;
+                //envia para o servidor qual criatura bateu no inimigo
+                battleClient.sendAttackEnemyHP(creature.getCurrentPlace().name());
                 return  true;
             }
             //para cada inimigo no campo do inimigo
@@ -79,7 +84,7 @@ public class CardInteractor {
     }
 
 
-    private static void playHitEffect() {
+    public static void playHitEffect() {
         porradaSound.play();
 
         System.out.printf("vai tocar o som");
