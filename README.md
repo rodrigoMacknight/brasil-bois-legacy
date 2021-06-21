@@ -17,6 +17,12 @@ Server
 
 
 # prioridades
-- fazer dois clientes se ccomunicarem
+- fazer dois clientes se ccomunicarem  -- DONE
+
 - criar cartas de varias racas (azul, vermelho, verde-amarelo)
 - refatorar codigo
+
+# bugs
+//bug
+noobinho -> morreu meu chico, e nasceu um chico morto no meu campo
+playerClient-> meu chico ficou com 0 de hp e nao morreu
