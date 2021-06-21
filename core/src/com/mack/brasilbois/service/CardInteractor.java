@@ -33,11 +33,12 @@ public class CardInteractor {
             //posicao do mouse
 
             //se bati no hp do inimigo
-            if(mousePosition.dst(enemyHPPos)< SizePositionValues.CARD_SNAP_DISTANCE){
+            if(mousePosition.dst(enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE){
                 //attacked the player
                 enemy.damage(creature.getAtkTotal());
                 //se estava steahlth tira
                 creature.setTargetable(true);
+
                 creature.fighted = true;
                 //envia para o servidor qual criatura bateu no inimigo
                 battleClient.sendAttackEnemyHP(creature.getCurrentPlace().name());

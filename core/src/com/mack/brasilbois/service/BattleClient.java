@@ -176,6 +176,9 @@ public class BattleClient {
 
     }
 
+
+
+
     private void handleEnemyDmg(String data) {
         Gson gson = new Gson();
         PlaceCardEvent place = gson.fromJson(data, PlaceCardEvent.class);

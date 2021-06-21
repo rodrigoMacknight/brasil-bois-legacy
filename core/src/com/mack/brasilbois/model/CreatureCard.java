@@ -54,7 +54,7 @@ public class CreatureCard extends Card {
         ATRAPALHAR_O_TRANSITO
     }
 
-    public boolean hasDeployAction() {
+    public boolean hasSummoningAction() {
         if(abilities.contains(Ability.BUFF_COCAINE)){
             return true;
         }
@@ -67,7 +67,7 @@ public class CreatureCard extends Card {
 
     }
 
-    public void doDeployAction(List<BattleField> creatureHolders) {
+    public void doSummoningAction(List<BattleField> creatureHolders) {
         //AECIO
         if(abilities.contains(Ability.BUFF_COCAINE)) {
             for (BattleField creatureHolder : creatureHolders) {

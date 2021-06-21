@@ -136,6 +136,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void renderAwaitingForPlayer() {
         game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+
         boardFont.draw(game.batch,"Aguardando outro player", 60 , 60 );
     }
 
@@ -330,9 +331,6 @@ public class PlayScreen implements Screen, InputProcessor {
         if (currentCard != null) {
 
             boolean wasPlaced = false;
-            //where the card was
-            //    System.out.println("card " + current.getName() +  " is on " + current.getCurrentPlace());
-
             switch (currentCard.getCurrentPlace()) {
                 //if the card was in the hand and is a  creature type
                 //the user can place her in any battlefield
@@ -373,6 +371,14 @@ public class PlayScreen implements Screen, InputProcessor {
         }
     }
 
+
+    private static void placeCardOnField(CreatureCard c, int where) {
+        enemyCreatureHolders.get(where).setCard(c);
+        c.setxPos(enemyCreatureHolders.get(where).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+        c.setyPos(enemyCreatureHolders.get(where).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+    }
+
+
     public static void placeEnemyCard(String placeCardJson) {
         Gson gson = new Gson();
         PlaceCardEvent placeCardEvent = gson.fromJson(placeCardJson, PlaceCardEvent.class);
@@ -403,36 +409,35 @@ public class PlayScreen implements Screen, InputProcessor {
         }
         enemy.useMana(creatureToPlace.getManaCost());
 
+        if (creatureToPlace.hasSummoningAction()) {
+            creatureToPlace.doSummoningAction(enemyCreatureHolders);
+        }
+
     }
 
-    private static void placeCardOnField(CreatureCard c, int where) {
-        enemyCreatureHolders.get(where).setCard(c);
-        c.setxPos(enemyCreatureHolders.get(where).getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-        c.setyPos(enemyCreatureHolders.get(where).getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
-    }
 
-    private boolean placeCard(BattleField b) {
+    private boolean placeCard(BattleField battlefield) {
         if (currentCard instanceof CreatureCard) {
             CreatureCard currentCreature = (CreatureCard) currentCard;
             //check if card mana cost higher than my mana cost
             if (player.getCurrentMana() >= currentCard.getManaCost()) {
 
-                b.setCard(currentCreature);
+                battlefield.setCard(currentCreature);
 
-                if (currentCreature.hasDeployAction()) {
-                    currentCreature.doDeployAction(creatureHolders);
+                if (currentCreature.hasSummoningAction()) {
+                    currentCreature.doSummoningAction(creatureHolders);
                 }
-                currentCard.setCurrentPlace(b.getBoardPlace());
+                currentCard.setCurrentPlace(battlefield.getBoardPlace());
 
                 //places the texture on top of that battlefield
-                currentCard.setxPos(b.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
-                currentCard.setyPos(b.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                currentCard.setxPos(battlefield.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                currentCard.setyPos(battlefield.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
                 //subtract mana from the uesr
                 player.useMana(currentCard.getManaCost());
                 //seta enjoo de criatura
                 currentCreature.setSick(true);
 
-                battleClient.sendPlaceCardToServer(b, currentCreature);
+                battleClient.sendPlaceCardToServer(battlefield, currentCreature);
                 currentCard = null; //solta a carta da mao
                 return true;
 
