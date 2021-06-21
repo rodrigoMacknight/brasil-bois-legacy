@@ -19,33 +19,24 @@ public class CreatureCard extends Card {
     private int attack;
     //or totalHealth
     private int defense;
-
     private boolean targetable;
-
     public boolean isSelectable = true;
-
     // a card is sick in the first turn, and after atacking
     private boolean sick;
-
     private int attackBonus;
-
     private float  attackMultiplier;
+    public int attackingAnimation = 0;
+    public boolean fighted;
+    public List<Status> cardStatus;
 
     public void setAtkBonus(int bonus){
         attackBonus = bonus;
     }
 
-    public int attackingAnimation = 0;
-
-
-    public boolean fighted;
-    public List<Status> cardStatus;
-
     public enum Status{
         COCAINE,
         BUFF_DEF
     }
-
 
     public enum Ability{
         STEALTH,
@@ -271,6 +262,11 @@ public class CreatureCard extends Card {
             batch.setColor(c.r,gb,(float)gb,1f);
         }
 
+        if (this.isSick()) {
+           // Color color =  batch.getColor();
+            batch.setColor(0.5f,1,0.5f,1f);
+        }
+
         if(!this.targetable){
             Color c =  batch.getColor();
             batch.setColor(c.r,c.g,c.b,0.4f);
@@ -294,14 +290,9 @@ public class CreatureCard extends Card {
         if(cardStatus.size()>0) {
             drawStatus(batch);
         }
-        //is atacking
-
-
-        //if card is stealth reduce alpha
-        if(true){
-            Color c =  batch.getColor();
-            batch.setColor(1,1,1,1f);
-        }
+        //return batch to default
+        Color c =  batch.getColor();
+        batch.setColor(1,1,1,1f);
 
     }
     //draw the current buffs the card have

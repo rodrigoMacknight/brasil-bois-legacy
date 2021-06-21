@@ -32,8 +32,11 @@ public class CardInteractor {
             }
             //posicao do mouse
 
+            creature.attackingAnimation = 250;
             //se bati no hp do inimigo
             if(mousePosition.dst(enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE){
+
+                playHitEffect();
                 //attacked the player
                 enemy.damage(creature.getAtkTotal());
                 //se estava steahlth tira
