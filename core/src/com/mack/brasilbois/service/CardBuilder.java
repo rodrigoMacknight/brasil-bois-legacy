@@ -14,6 +14,9 @@ import sun.font.CreatedFontTracker;
 public class CardBuilder {
 
     //initialize all cards
+
+    public static List<Card> metaCards;
+
     public static List<Card> initializeCards() {
         List<Card> ret = new ArrayList<Card>();
 
@@ -31,9 +34,15 @@ public class CardBuilder {
 
         buildChicoBuarque(ret);
 
-
+        initializeMetaCards(metaCards);
 
         return ret;
+    }
+
+    private static void initializeMetaCards(List<Card> metaCards) {
+        metaCards = new ArrayList<>();
+        metaCards.add(buildChicoBuarqueDead());
+
     }
 
 

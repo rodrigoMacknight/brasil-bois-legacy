@@ -54,9 +54,9 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c = null;
             if (i%2 ==0) {
-                 c = BrBoisMain.getCardByName("Chico Buarque");
+                 c = BrBoisMain.getCardByName("Chico Buarque").getCopy();
             } else {
-                c = BrBoisMain.getCardByName("Aecio Neves");
+                c = BrBoisMain.getCardByName("Aecio Neves").getCopy();
             }
             if(enemy) {
                 c.setxPos(SizePositionValues.ENEMY_GRIMORIO_X);

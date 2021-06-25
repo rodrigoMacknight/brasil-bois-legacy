@@ -95,7 +95,8 @@ public class CreatureCard extends Card {
     }
 
     private void atrapalharOtransitoAbility() {
-        CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+        //TODO GET CHICO
+        CreatureCard deadChico = (CreatureCard) CardBuilder.metaCards.get(0).getCopy();
         if (this.owner==PlayScreen.player) {
             for (BattleField creatureHolder : enemyCreatureHolders) {
                 if (creatureHolder.getCard() == null) {
