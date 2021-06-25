@@ -20,6 +20,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 import static com.mack.brasilbois.view.PlayScreen.enemy;
+import static com.mack.brasilbois.view.PlayScreen.gameEnded;
 import static com.mack.brasilbois.view.PlayScreen.player;
 
 public class BattleClient {
@@ -124,7 +125,7 @@ public class BattleClient {
         try {
             //socket = IO.socket("http://54.232.104.27:8080");
             if (socket == null) {
-                socket = IO.socket("http://54.232.104.27:8080");
+                socket = IO.socket("http://localhost:8080");
                 socket.connect();
             }
         } catch (URISyntaxException e) {
@@ -176,9 +177,6 @@ public class BattleClient {
 
     }
 
-
-
-
     private void handleEnemyDmg(String data) {
         Gson gson = new Gson();
         PlaceCardEvent place = gson.fromJson(data, PlaceCardEvent.class);
@@ -188,6 +186,9 @@ public class BattleClient {
         creature.attackingAnimation = 120;
         CardInteractor.playHitEffect();
         player.damage(creature.getAtkTotal());
+        if (player.health<=0) {
+            gameEnded = true;
+        }
 
     }
 

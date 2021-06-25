@@ -5,6 +5,7 @@ import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.view.PlayScreen;
 
 
 import static com.mack.brasilbois.view.PlayScreen.battleClient;
@@ -45,6 +46,10 @@ public class CardInteractor {
                 creature.fighted = true;
                 //envia para o servidor qual criatura bateu no inimigo
                 battleClient.sendAttackEnemyHP(creature.getCurrentPlace().name());
+                if (enemy.health<=0) {
+                    PlayScreen.gameEnded=true;
+                }
+
                 return  true;
             }
             //para cada inimigo no campo do inimigo
@@ -110,7 +115,7 @@ public class CardInteractor {
 
         //se a criatura atacante morreu
         if(friendlyCreature.getHealth()<=0){
-            System.out.println("card "+ currentCard.getName() +  " died");
+            System.out.println("card "+ friendlyCreature.getName() +  " died");
             friendlyCreature.kill();
 
         }

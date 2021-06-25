@@ -40,71 +40,22 @@ public class BrBoisMain extends Game {
     @Override
     public void create() {
 
-        //connectSocket();
-        //configSocketEvents();
         batch = new SpriteBatch();
         //initialize game cards on memory
         allCards = CardBuilder.initializeCards();
         //create the gameStateManager
         setScreen(new PlayScreen(this));
 
-
     }
+
     @Override
     public void render() {
         super.render();
     }
 
-    //config listeners
-    private void configSocketEvents() {
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener(){
-
-            @Override
-            public void call(Object... args) {
-                Gdx.app.log("SocketIO", "Connected");
-            }
-        }).on("socketId", new Emitter.Listener(){
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-
-                String id = null;
-                try {
-                    id = data.getString("id");
-                    Gdx.app.log("socketIO", "my id: " + id );
-                } catch (JSONException e) {
-                    Gdx.app.log("socketIO", "error getting ID" );
-                }
-
-            }
-        }).on("newPlayer", new Emitter.Listener(){
-
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                Gdx.app.log("SocketIO", "received event socketId");
-                String id = null;
-                try {
-                    id = data.getString("id");
-                    Gdx.app.log("socketIO", "new player id: " + id );
-                } catch (JSONException e) {
-                    Gdx.app.log("socketIO", "error getting ID" );
-                }
-
-            }
-        });
+    public static Card getCardByName(String cardName) {
+       return allCards.stream().filter(c -> c.getName().equals(cardName)).findAny().orElse(null);
     }
-    //connect to server
-    private void connectSocket() {
-
-        try {
-            socket = IO.socket("http://54.232.104.27:8080");
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
 }

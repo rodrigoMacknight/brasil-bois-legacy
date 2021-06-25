@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.service.CardBuilder;
+import com.mack.brasilbois.utils.PlayerEventsExchanger;
 import com.mack.brasilbois.view.PlayScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mack.brasilbois.view.PlayScreen.creatureHolders;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
 public class CreatureCard extends Card {
@@ -86,10 +88,17 @@ public class CreatureCard extends Card {
 
     public void doDeathAction() {
         //bloqueia um campo adversario
+
         if(abilities.contains(Ability.ATRAPALHAR_O_TRANSITO)) {
+            atrapalharOtransitoAbility();
+        }
+    }
+
+    private void atrapalharOtransitoAbility() {
+        CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+        if (this.owner==PlayScreen.player) {
             for (BattleField creatureHolder : enemyCreatureHolders) {
-                if (creatureHolder.getCard() == null ) {
-                    CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+                if (creatureHolder.getCard() == null) {
                     creatureHolder.setCard(deadChico);
                     deadChico.setxPos(creatureHolder.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
                     deadChico.setyPos(creatureHolder.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
@@ -97,6 +106,19 @@ public class CreatureCard extends Card {
                 }
 
             }
+        } else {
+            for (int i = creatureHolders.size() - 1; i>=0 ;i--) {
+                BattleField bt = creatureHolders.get(i);
+                if (bt.getCard() == null) {
+                    BoardPlace mirrorPlace = PlayerEventsExchanger.getMirrorBattleField(bt.getBoardPlace());
+                    bt.setCard(deadChico);
+                    deadChico.setxPos(bt.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                    deadChico.setyPos(bt.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                    return;
+                }
+
+            }
+
         }
     }
 
@@ -136,10 +158,30 @@ public class CreatureCard extends Card {
             case FIELD_6:
                 PlayScreen.getCreatureHolders().get(5).setCard(null);
                 break;
+            case ENEMY_FIELD_1:
+                enemyCreatureHolders.get(0).setCard(null);
+                break;
+            case ENEMY_FIELD_2:
+                enemyCreatureHolders.get(1).setCard(null);
+                break;
+            case ENEMY_FIELD_3:
+                enemyCreatureHolders.get(2).setCard(null);
+                break;
+            case ENEMY_FIELD_4:
+                enemyCreatureHolders.get(3).setCard(null);
+                break;
+            case ENEMY_FIELD_5:
+                enemyCreatureHolders.get(4).setCard(null);
+                break;
+            case ENEMY_FIELD_6:
+                enemyCreatureHolders.get(5).setCard(null);
+                break;
         }
 
         if(hasDeathAbility()) {
-            doDeathAction();
+           // if(this.owner==PlayScreen.player) {
+                doDeathAction();
+            //}
         }
     }
 
@@ -160,23 +202,6 @@ public class CreatureCard extends Card {
 
     public boolean isSick() {
         return sick;
-    }
-
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
     }
 
 
@@ -254,18 +279,21 @@ public class CreatureCard extends Card {
     public void drawCardWithoutMana(SpriteBatch batch) {
         //System.out.println("drawCard" + this.getName());
 
-        if (attackingAnimation>0) {
-            Color c =  batch.getColor();
-            attackingAnimation--;
-
-            float gb = (float)1/attackingAnimation;
-            batch.setColor(c.r,gb,(float)gb,1f);
-        }
 
         if (this.isSick()) {
-           // Color color =  batch.getColor();
+            // Color color =  batch.getColor();
             batch.setColor(0.5f,1,0.5f,1f);
+        } else {
+            if (attackingAnimation > 0) {
+
+                Color c = batch.getColor();
+                attackingAnimation--;
+
+                float gb = (float) 1 / attackingAnimation;
+                batch.setColor(c.r, gb, (float) gb, 1f);
+            }
         }
+
 
         if(!this.targetable){
             Color c =  batch.getColor();

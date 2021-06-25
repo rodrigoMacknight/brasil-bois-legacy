@@ -82,7 +82,7 @@ public class CardBuilder {
     private static void buildAecio(List<Card> ret) {
         Texture aecio = new Texture("Card_arts/aecio.png");
 
-        CreatureCard aecioCard =  new CreatureCard("Aecio Neves ",10,5,1,
+        CreatureCard aecioCard =  new CreatureCard("Aecio Neves",10,5,1,
                 Card.Faction.AZUL,Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, aecio,
                 1);
 
@@ -94,7 +94,7 @@ public class CardBuilder {
     private static void buildCalouro(List<Card> ret) {
         Texture calouroFederal = new Texture("Card_arts/calouro.png");
 
-        CreatureCard calouro=  new CreatureCard("Calouro da federal ",2,3,1,
+        CreatureCard calouro=  new CreatureCard("Calouro da federal",2,3,1,
                 Card.Faction.VERMELHA,Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, calouroFederal,
                 1);
 
@@ -104,7 +104,7 @@ public class CardBuilder {
     private static void buildVeterano(List<Card> ret) {
         Texture veteranoFederal = new Texture("Card_arts/veteranoFederal.png");
 
-        CreatureCard veterano  = new CreatureCard("Veterano da federal ",3,6,1,
+        CreatureCard veterano  = new CreatureCard("Veterano da federal",3,6,1,
                 Card.Faction.VERMELHA,Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, veteranoFederal,
                 1);
 
@@ -114,7 +114,7 @@ public class CardBuilder {
     private static void buildAcreBoy(List<Card> ret) {
         Texture acreBoyArt = new Texture("Card_arts/meninoDoAcre.png");
 
-        CreatureCard acreBoy =   new CreatureCard("Menino do acre ",4,2,1,
+        CreatureCard acreBoy =   new CreatureCard("Menino do acre",4,2,1,
                 Card.Faction.MACONARIA,Card.CardType.CRIATURA, Card.Tribo.ILLUMINATI, acreBoyArt,
                 1);
 

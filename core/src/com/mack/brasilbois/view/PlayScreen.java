@@ -29,6 +29,7 @@ public class PlayScreen implements Screen, InputProcessor {
     boolean drawAssistence = false;
 
     public static boolean gameStarted = false;
+    public static boolean gameEnded = false;
     //connects to battle server
     public static BattleClient battleClient;
     //in order to access the game.batch
@@ -93,7 +94,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         //generating placeholder deck
-        player = new Player(Tests.getTestDeck(20, false));
+        player = new Player(Tests.getCaetanoTestDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
         //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
@@ -128,9 +129,28 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        if(gameStarted) renderBoard();
+        if(gameEnded) {
+            renderGameEnded();
+        } else if (gameStarted) {
+            renderBoard();
+        }
         else renderAwaitingForPlayer();
         game.batch.end();
+
+    }
+
+    private void renderGameEnded() {
+
+        if (player.health <= 0) {
+            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+
+            boardFont.draw(game.batch,"VOCÊ É O PERDEDOR!", 400 , 400 );
+        } else {
+            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+
+            boardFont.draw(game.batch,"VOCÊ É O GANHANDOR!", 400 , 400 );
+        }
+
 
     }
 

@@ -12,7 +12,7 @@ public class Player {
 
     private static final int INIT_HP = 40;
 
-    private int health;
+    public int health;
 
     private Stack<Card> playerDeck;
 
