@@ -94,7 +94,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         //generating placeholder deck
-        player = new Player(Tests.getBlueDeck(20, false));
+        player = new Player(Tests.getVerdeAmareloDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
         //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));

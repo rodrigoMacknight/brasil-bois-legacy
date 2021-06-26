@@ -336,7 +336,7 @@ public class CardBuilder {
         Texture tex = new Texture("Card_arts/vermelho/feminista.png");
 
         CreatureCard card = new CreatureCard("Feminista", 4, 5, 1, Card.Faction.VERMELHA,
-                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 1);
+                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 3);
 
         ret.add(card);
     }
