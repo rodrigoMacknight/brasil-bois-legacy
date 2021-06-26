@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class Player {
 
-    private static final int INIT_HP = 40;
+    private static final int INIT_HP = 20;
 
     public int health;
 

@@ -46,7 +46,7 @@ public class CreatureCard extends Card {
         BUFF_GENTE_DE_BEM,
         ATRAPALHAR_O_TRANSITO
     }
-
+    //BATTLECRY
     public boolean hasSummoningAction() {
         if(abilities.contains(Ability.BUFF_COCAINE)){
             return true;
@@ -54,12 +54,10 @@ public class CreatureCard extends Card {
         if(abilities.contains(Ability.BUFF_GENTE_DE_BEM)){
             return true;
         }
-
-
             return false;
 
     }
-
+    //BATLLECRY
     public void doSummoningAction(List<BattleField> creatureHolders) {
         //AECIO
         if(abilities.contains(Ability.BUFF_COCAINE)) {
@@ -85,7 +83,7 @@ public class CreatureCard extends Card {
             }
         }
     }
-
+    //DEATHRATTLE
     public void doDeathAction() {
         //bloqueia um campo adversario
 
@@ -127,7 +125,7 @@ public class CreatureCard extends Card {
         cardStatus.add(status);
         if(status==Status.COCAINE){
             this.attackMultiplier=1.5f;
-            this.health = this.health/2;
+            this.health -=1;
             //mata quem tem 1 de vida
             if(this.health<=0){
                 this.kill();
@@ -135,7 +133,7 @@ public class CreatureCard extends Card {
 
         }
         if(status==Status.BUFF_DEF){
-            this.health += 3;
+            this.health += 2;
         }
     }
 

@@ -78,3 +78,11 @@
  - 2- Caixa dois 
    
  - 3 - Abrir CNPJ - Coloca 3 cartas laranja no deck do oponente
+
+
+
+
+
+
+
+ //TAUNT, BATTLECRY, DEATHRATTLE, RUSH(N TEM ENJOO DE ENVOCACAO), LIFESTEAL
