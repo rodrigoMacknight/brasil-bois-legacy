@@ -26,7 +26,7 @@
 
 
 ## Criaturas
-
+- 2 - terraplanista //todo
 - 2 - Seu tio - você sabe qual
 - 3 - Crente - taunt
 - 4 - PM -> quando se aposenta vira miliciano
@@ -60,7 +60,8 @@
 # Facção Azul 
 ## Criaturas
 - 2 - Gerente
-- 2 - Liberal 
+- 2 - Liberal
+- 2 - Anarcocapitalista
 - 1 - Coach
 - 7 - Aecio Neves
 - 6 - Alexandre frota

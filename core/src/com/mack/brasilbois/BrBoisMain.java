@@ -44,6 +44,9 @@ public class BrBoisMain extends Game {
         //initialize game cards on memory
         allCards = CardBuilder.initializeCards();
         //create the gameStateManager
+
+        //1- login/cadastro
+        //2- menu ->play/build deck/exit
         setScreen(new PlayScreen(this));
 
     }

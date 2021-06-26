@@ -63,6 +63,34 @@ public class Tests {
     }
 
 
+
+
+    public static Stack<Card> getVerdeAmareloDeck(int cardTotal, boolean enemy) {
+        Stack<Card> ret = new Stack<>();
+        for (int i= 0;i<cardTotal;i++){
+            Card c ;
+            Random rand =  new Random();
+            int allCardsCount = BrBoisMain.allCards.size();
+            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            while (c.getFaction()!= Card.Faction.VERDEAMARELO) {
+                c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            }
+
+            if(enemy) {
+                c.setxPos(SizePositionValues.ENEMY_GRIMORIO_X);
+                c.setyPos(SizePositionValues.ENEMY_GRIMORIO_Y);
+
+            }else{
+                c.setxPos(SizePositionValues.FRIENDLY_GRIMORIO_X);
+                c.setyPos(SizePositionValues.FRIENDLY_GRIMORIO_Y);
+            }
+
+            ret.push(c);
+        }
+        return ret;
+    }
+
+
     public static Stack<Card> getBlueDeck(int cardTotal, boolean enemy) {
         Stack<Card> ret = new Stack<>();
         for (int i= 0;i<cardTotal;i++){

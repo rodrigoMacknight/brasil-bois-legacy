@@ -22,6 +22,13 @@ public class CardBuilder {
         buildAecio(ret);
         buildCaveirao(ret);
         buildCoxinha(ret);
+        buildCoach(ret);
+        buildDoria(ret);
+        buildFrota(ret);
+        buildGerente(ret);
+        buildLiberal(ret);
+        buildTemer(ret);
+
 
         //RED
         buildCalouro(ret);
@@ -56,6 +63,61 @@ public class CardBuilder {
         initializeMetaCards();
 
         return ret;
+    }
+
+    private static void buildTemer(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Temer.png");
+
+        CreatureCard card = new CreatureCard("Temer", 13, 5, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 1);
+
+        ret.add(card);
+    }
+
+
+    private static void buildLiberal(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Liberal.png");
+
+        CreatureCard card = new CreatureCard("Liberal", 13, 5, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.GENTE_DE_BEM, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildGerente(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Gerente.png");
+
+        CreatureCard card = new CreatureCard("Gerente", 13, 5, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.GENTE_DE_BEM, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildFrota(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Doria.png");
+
+        CreatureCard card = new CreatureCard("Doria", 13, 5, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildDoria(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Doria.png");
+
+        CreatureCard card = new CreatureCard("Doria", 13, 5, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildCoach(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/azul/Coach.png");
+
+        CreatureCard card = new CreatureCard("Coach", 13, 5, 1, Card.Faction.ROXA,
+                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 1);
+
+        ret.add(card);
     }
 
     private static void buildZeDoCaixao(List<Card> ret) {

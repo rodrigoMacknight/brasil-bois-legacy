@@ -94,7 +94,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         //generating placeholder deck
-        player = new Player(Tests.getPurpleDeck(20, false));
+        player = new Player(Tests.getTestDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
         //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
@@ -104,6 +104,7 @@ public class PlayScreen implements Screen, InputProcessor {
         //initilize player hand
         player.grabCard(5);
         enemy.grabCard(6);
+        //player.startTurn();
 
         //loads hpMaths
         playerHPPos = new Vector2(SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
