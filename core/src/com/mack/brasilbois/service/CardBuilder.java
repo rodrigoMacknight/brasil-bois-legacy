@@ -70,11 +70,11 @@ public class CardBuilder {
     private static void buildTemer(List<Card> ret) {
         Texture tex = new Texture("Card_arts/azul/Temer.png");
 
-        CreatureCard card = new CreatureCard("Temer", 7, 7, 1, Card.Faction.AZUL,
-                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 9);
+        CreatureCard card = new CreatureCard("Temer", 8, 7, 1, Card.Faction.AZUL,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 7);
 
 
-
+        //todo: vampirismo 50%
 
         ret.add(card);
     }
@@ -112,7 +112,7 @@ public class CardBuilder {
     private static void buildDoria(List<Card> ret) {
         Texture tex = new Texture("Card_arts/azul/Doria.png");
 
-        CreatureCard card = new CreatureCard("Doria", 9, 9, 1, Card.Faction.AZUL,
+        CreatureCard card = new CreatureCard("Doria", 3, 14, 1, Card.Faction.AZUL,
                 Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 9);
 
         //TODO: QUANDO CAUSA DANO ABRE CNPJ
@@ -387,7 +387,7 @@ public class CardBuilder {
 
         CreatureCard aecioCard =  new CreatureCard("Aecio Neves",8,4,1,
                 Card.Faction.AZUL,Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, aecio,
-                1);
+                8);
 
         aecioCard.setAbilities(CreatureCard.Ability.BUFF_COCAINE);
 
