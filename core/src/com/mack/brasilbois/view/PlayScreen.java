@@ -129,7 +129,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        if(true) {
+        if(gameEnded) {
             renderGameEnded();
         } else if (gameStarted) {
             renderBoard();
@@ -142,8 +142,8 @@ public class PlayScreen implements Screen, InputProcessor {
     private void renderGameEnded() {
         //264 width
 
-        if (true) {
-            game.batch.draw(awaitBattle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if (player.health <= 0) {
+            game.batch.draw(awaitBattle, 50, 50, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 200);
 
             boardFont.draw(game.batch,"VOCÊ É O PERDEDOR!", ((Gdx.graphics.getWidth()/2) - 132) , Gdx.graphics.getHeight()/2 );
         } else {
