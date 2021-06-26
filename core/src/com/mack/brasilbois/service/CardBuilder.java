@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import sun.font.CreatedFontTracker;
-
 public class CardBuilder {
 
     //initialize all cards
@@ -20,46 +18,103 @@ public class CardBuilder {
     public static List<Card> initializeCards() {
         List<Card> ret = new ArrayList<Card>();
 
+
+        //BLUE
+        buildAecio(ret);
+        buildCaveirao(ret);
         buildCoxinha(ret);
 
-        buildAcreBoy(ret);
-
+        //RED
+        buildCalouro(ret);
+        buildChicoBuarque(ret);
+        buildDilma(ret);
+        buildDuvivier(ret);
+        buildFeminista(ret);
+        buildJeanWillis(ret);
+        buildLula(ret);
+        buildPabloVitar(ret);
+        buildProfessor(ret);
         buildVeterano(ret);
 
-        buildCalouro(ret);
+        //PURPLE
+        buildAcreBoy(ret);
 
-        buildAecio(ret);
+        //VERDE-AMARELO
 
-        buildCaveirao(ret);
-
-        buildChicoBuarque(ret);
-
-        initializeMetaCards(metaCards);
+        initializeMetaCards();
 
         return ret;
     }
 
-    private static void initializeMetaCards(List<Card> metaCards) {
+    private static void initializeMetaCards() {
         metaCards = new ArrayList<>();
         metaCards.add(buildChicoBuarqueDead());
 
     }
 
+    private static void buildProfessor(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/Professor.png");
 
-    public static CreatureCard buildChicoBuarqueDead() {
+        CreatureCard card = new CreatureCard("Professor", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 1);
 
-        Texture chicoTexture = new Texture("Card_arts/chico_morto.png");
-
-        CreatureCard deadChico = new CreatureCard("Corpo do Chico", 0, 99,1, Card.Faction.VERMELHA,
-                Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);
-        deadChico.isSelectable = false;
-
-        //chicoBuarque.setAbilities(CreatureCard.Ability.ATRAPALHAR_O_TRANSITO);
-
-       return deadChico;
-
+        ret.add(card);
     }
 
+    private static void buildPabloVitar(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/pabloVitar.png");
+
+        CreatureCard card = new CreatureCard("Pablo Vitar", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildLula(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/lula.png");
+
+        CreatureCard card = new CreatureCard("Lula", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildJeanWillis(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/Jean Wyllys.png");
+
+        CreatureCard card = new CreatureCard("Jean Wyllys", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildDuvivier(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/duvivier.png");
+
+        CreatureCard card = new CreatureCard("Duvivier", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildFeminista(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/feminista.png");
+
+        CreatureCard card = new CreatureCard("Feminista", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 1);
+
+        ret.add(card);
+    }
+
+    private static void buildDilma(List<Card> ret) {
+
+        Texture tex = new Texture("Card_arts/dilma.png");
+
+        CreatureCard card = new CreatureCard("Dilma", 13, 5, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 1);
+
+        ret.add(card);
+    }
 
 
     private static void buildChicoBuarque(List<Card> ret) {
@@ -67,7 +122,7 @@ public class CardBuilder {
         Texture chicoTexture = new Texture("Card_arts/chico_vivo.png");
 
         CreatureCard chicoBuarque = new CreatureCard("Chico Buarque", 1, 8,1, Card.Faction.VERMELHA,
-                Card.CardType.CRIATURA, Card.Tribo.MUSICO, chicoTexture, 1);
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, chicoTexture, 1);
 
 
         chicoBuarque.setAbilities(CreatureCard.Ability.ATRAPALHAR_O_TRANSITO);
@@ -141,10 +196,25 @@ public class CardBuilder {
         ret.add(coxinha);
     }
 
+    public static CreatureCard buildChicoBuarqueDead() {
+
+        Texture chicoTexture = new Texture("Card_arts/chico_morto.png");
+
+        CreatureCard deadChico = new CreatureCard("Corpo do Chico", 0, 99,1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.ARTISTA, chicoTexture, 1);
+        deadChico.isSelectable = false;
+
+        //chicoBuarque.setAbilities(CreatureCard.Ability.ATRAPALHAR_O_TRANSITO);
+
+        return deadChico;
+
+    }
+
+
     public static Card generateCardFromName(final String cardName) {
         List<Card> cardFromNameList =
                 BrBoisMain.allCards.stream().
-                filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
+                        filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
 
         Card card = cardFromNameList.get(0).getCopy();
         return card;

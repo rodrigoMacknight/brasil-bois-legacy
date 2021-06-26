@@ -125,7 +125,7 @@ public class BattleClient {
         try {
             //socket = IO.socket("http://54.232.104.27:8080");
             if (socket == null) {
-                socket = IO.socket("http://localhost:8080");
+                socket = IO.socket("http://54.232.104.27:8080");
                 socket.connect();
             }
         } catch (URISyntaxException e) {

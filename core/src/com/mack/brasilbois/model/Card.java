@@ -58,7 +58,7 @@ public abstract class Card {
 
         MILITAR,
 
-        MUSICO
+        ARTISTA
 
 
     }
