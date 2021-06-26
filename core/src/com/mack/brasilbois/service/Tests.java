@@ -3,18 +3,16 @@ package com.mack.brasilbois.service;
 import com.mack.brasilbois.BrBoisMain;
 import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.Card;
-import com.mack.brasilbois.model.CreatureCard;
 
 import java.util.Random;
 import java.util.Stack;
 
-import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
 public class Tests {
 
     //returns a test Deck
     public static  Stack<Card> getTestDeck(int cardTotal,boolean enemy){
-        Stack<Card> ret = new Stack<Card>();
+        Stack<Card> ret = new Stack<>();
 
 
         for (int i= 0;i<cardTotal;i++){
@@ -40,7 +38,7 @@ public class Tests {
 
 
     public static Stack<Card> getRedDeck(int cardTotal, boolean enemy) {
-        Stack<Card> ret = new Stack<Card>();
+        Stack<Card> ret = new Stack<>();
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
@@ -66,7 +64,7 @@ public class Tests {
 
 
     public static Stack<Card> getBlueDeck(int cardTotal, boolean enemy) {
-        Stack<Card> ret = new Stack<Card>();
+        Stack<Card> ret = new Stack<>();
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
@@ -91,7 +89,7 @@ public class Tests {
     }
 
     public static Stack<Card> getPurpleDeck(int cardTotal, boolean enemy) {
-        Stack<Card> ret = new Stack<Card>();
+        Stack<Card> ret = new Stack<>();
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
@@ -116,10 +114,10 @@ public class Tests {
     }
 
     public static  Stack<Card> getCaetanoTestDeck(int cardTotal,boolean enemy){
-        Stack<Card> ret = new Stack<Card>();
+        Stack<Card> ret = new Stack<>();
 
         for (int i= 0;i<cardTotal;i++){
-            Card c = null;
+            Card c ;
             if (i%2 ==0) {
                  c = BrBoisMain.getCardByName("Chico Buarque").getCopy();
             } else {
