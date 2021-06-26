@@ -33,8 +33,8 @@ public abstract class Card {
     public enum Faction {
         VERMELHA, //esquerdistas
         AZUL, //direitas
-        MACONARIA, //macon
-        BANDIDAGEM //bandidagem
+        ROXA, //macon
+        VERDEAMARELO //bandidagem
     }
 
     public enum CardType {
