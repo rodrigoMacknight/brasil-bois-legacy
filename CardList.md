@@ -3,12 +3,9 @@
 - 1 -Calouro da federal -> terceiro turno vivo vira veterano
 - 3 -Veterano da federal  = calouro +2/+3
 - 3 - Professor historia. -> +1/+2 todos estudantes
-- 3 - Professor historia. -> +1/+2 todos estudantes
-- 3 - Professor historia. -> +1/+2 todos estudantes
 - 4 - Gregorio dudiver -> 
 - 5 - Feminista -> 
 - 5 -Jean willis (cuspe dobro de dano em (militares/gente_de_bem) 2 de dano nas criaturas ao lado la criatura alvo)
-- 6 - Black bloc >  
 - 7 - Chico buarque ->  Morre na mão contra atraplhando um campo inimigo
 - 8 - Dilma - quando morre coloque 'temer' em seu lugar
 - 8- Pablo vitar - ao atacar engravida do Lula -> depois de um turno gera um esquerdista estudante 1/2
@@ -30,18 +27,17 @@
 
 ## Criaturas
 
-- 2 - Coxinha 
-- 3 - Sara Winter
+- 2 - Seu tio - você sabe qual
+- 3 - Crente - taunt
+- 4 - PM -> quando se aposenta vira miliciano
+- 5 - Sara Winter - 
 - 4 - miliciano
-- 5 - moro
-- 9 - Bolsonaro
+- 7 - Sergio Moro
+- 9 - bolsonaro 
 
 ## Magias 
 - Fake news - 
 - Mamadeira de piroca - 
-
-
-## Artefatos 
 - Vai pra Cuba  -  destroi a criatura alvo
 
 
@@ -51,7 +47,6 @@
 - 1- Menino do Acre
 - 4- ze do caixão 
 - 5- inri Cristo
-- 6- mãe dina
 - 7- deus
 - 8- padre Fábio de Melo
 - 9- et de varginha
@@ -61,25 +56,19 @@
 ## Magias 
 - Reptiliano a Paisana - quando a criatura morre substitui por um reptiliano 6/6
 
-- Artefatos 
-
-
-
 
 # Facção Azul 
 ## Criaturas
-
-- 9  -Doria - Gestorzão 0/+3 para criaturas aliadas azuis 0/-1 para outras
-- 8 - Michel Temer -vampirismo -> recupera 50% do atak
-- 7 -Aecio Neves
+- 2 - Gerente
 - 2 - Liberal 
-- 6 - Capitão Nasciemento
-- 7 - Caveirão
-- 8 - Nando Moura
-- 9 - Alexandre frota
-- 10 - Tia doida dos gato
-- 11- Sergio Moro
-- 12 - bolsonaro 
+- 1 - Coach
+- 7 - Aecio Neves
+- 6 - Alexandre frota
+- 9 - Doria - Gestorzão 0/+3 para criaturas aliadas azuis 0/-1 para outras
+- 8 - Michel Temer -vampirismo -> recupera 50% do atak
+
+
+
 
 
 # Facção Azul Magias
