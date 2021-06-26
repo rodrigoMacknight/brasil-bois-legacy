@@ -141,7 +141,6 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void renderGameEnded() {
         //264 width
-
         if (player.health <= 0) {
             game.batch.draw(awaitBattle, 50, 50, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 200);
 
@@ -151,8 +150,6 @@ public class PlayScreen implements Screen, InputProcessor {
 
             boardFont.draw(game.batch,"VOCÊ É O GANHANDOR!", 400 , 400 );
         }
-
-
     }
 
     private void renderAwaitingForPlayer() {
