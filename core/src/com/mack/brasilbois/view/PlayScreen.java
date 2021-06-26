@@ -142,11 +142,11 @@ public class PlayScreen implements Screen, InputProcessor {
     private void renderGameEnded() {
 
         if (player.health <= 0) {
-            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+            game.batch.draw(awaitBattle, 50, 50, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 200);
 
             boardFont.draw(game.batch,"VOCÊ É O PERDEDOR!", 400 , 400 );
         } else {
-            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+            game.batch.draw(awaitBattle, 50, 50, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 200);
 
             boardFont.draw(game.batch,"VOCÊ É O GANHANDOR!", 400 , 400 );
         }
@@ -155,7 +155,7 @@ public class PlayScreen implements Screen, InputProcessor {
     }
 
     private void renderAwaitingForPlayer() {
-        game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+        game.batch.draw(awaitBattle, 50, 50, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 200);
 
         boardFont.draw(game.batch,"Aguardando outro player", 60 , 60 );
     }
