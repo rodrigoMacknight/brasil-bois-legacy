@@ -7,6 +7,8 @@ import com.mack.brasilbois.model.Card;
 import java.util.Random;
 import java.util.Stack;
 
+import sun.awt.image.ByteBandedRaster;
+
 
 public class Tests {
 
@@ -39,11 +41,15 @@ public class Tests {
 
     public static Stack<Card> getRedDeck(int cardTotal, boolean enemy) {
         Stack<Card> ret = new Stack<>();
+
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
             int allCardsCount = BrBoisMain.allCards.size();
             c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            if (i % 3 == 0) {
+               c = BrBoisMain.getCardByName("Bone da Cut").getCopy();
+            }
             while (c.getFaction()!= Card.Faction.VERMELHA) {
                 c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
             }
@@ -56,6 +62,7 @@ public class Tests {
                 c.setxPos(SizePositionValues.FRIENDLY_GRIMORIO_X);
                 c.setyPos(SizePositionValues.FRIENDLY_GRIMORIO_Y);
             }
+
 
             ret.push(c);
         }

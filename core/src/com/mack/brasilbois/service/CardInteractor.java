@@ -5,6 +5,7 @@ import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.MagicCard;
 import com.mack.brasilbois.view.PlayScreen;
 
 
@@ -119,5 +120,10 @@ public class CardInteractor {
             friendlyCreature.kill();
 
         }
+    }
+
+    public static void doMagicInteraction(CreatureCard creatureCard, Card currentCard) {
+        MagicCard magic = (MagicCard) currentCard;
+        magic.doMagicTrick(creatureCard);
     }
 }

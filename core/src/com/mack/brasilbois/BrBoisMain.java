@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.service.CardBuilder;
+import com.mack.brasilbois.view.MenuScreen;
 import com.mack.brasilbois.view.PlayScreen;
 
 import org.json.JSONException;

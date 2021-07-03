@@ -2,14 +2,17 @@ package com.mack.brasilbois.service;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.mack.brasilbois.BrBoisMain;
+import com.mack.brasilbois.enums.CardNames;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.MagicCard;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CardBuilder {
+
 
     //initialize all cards
 
@@ -43,6 +46,8 @@ public class CardBuilder {
         buildVeterano(ret);
         buildCalouro(ret);
 
+        buildBoneDaCut(ret);
+
         //PURPLE
         buildChicoXavier(ret);
         buildDeus(ret);
@@ -65,6 +70,17 @@ public class CardBuilder {
         initializeMetaCards();
 
         return ret;
+    }
+
+    private static void buildBoneDaCut(List<Card> ret) {
+        Texture tex = new Texture("Card_arts/vermelho/boneDaCut.png");
+
+        MagicCard card = new MagicCard(CardNames.BONE_DA_CUT, 1, Card.Faction.VERMELHA,
+                Card.CardType.MAGIC, tex, 2, MagicCard.MagicType.BUFF);
+
+        ret.add(card);
+
+
     }
 
     private static void buildTemer(List<Card> ret) {

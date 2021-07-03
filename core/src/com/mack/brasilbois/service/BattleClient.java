@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.MagicCard;
 import com.mack.brasilbois.model.eventsMapper.CreatureBattleEvent;
 import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
 import com.mack.brasilbois.utils.PlayerEventsExchanger;
@@ -125,7 +126,7 @@ public class BattleClient {
         try {
             //socket = IO.socket("http://54.232.104.27:8080");
             if (socket == null) {
-                socket = IO.socket("http://54.232.104.27:8080");
+                socket = IO.socket("http://localhost:8080");
                 socket.connect();
             }
         } catch (URISyntaxException e) {
@@ -177,6 +178,22 @@ public class BattleClient {
 
     }
 
+    public void sendUseMagicCard(BattleField battleField, Card currentCard) {
+        MagicCard magic = (MagicCard) currentCard;
+        try {
+            String jsonString = new JSONObject()
+                    .put("boardPlace", battleField.getBoardPlace())
+                    .put("currentCard", currentCard.getName())
+                    .toString();
+            socket.emit("useMagicCard", jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     private void handleEnemyDmg(String data) {
         Gson gson = new Gson();
         PlaceCardEvent place = gson.fromJson(data, PlaceCardEvent.class);
@@ -212,6 +229,7 @@ public class BattleClient {
 
 
     }
+
 
 
 }

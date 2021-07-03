@@ -13,7 +13,7 @@
 
 ## Vermelho Artefatos
 - 1 -Iphone:+3+/2  - criatura alvo
-- 2 -Foice e martelo -  +5/+1 criatura alvo, + 1/ +1 para todas as vermelhas
+- 2 -Foice e martelo -  +2/+1 criatura alvo, + 1/ +1 para todas as vermelhas
 - 3- Boné da cut - +0/+4 criatura alvo -20% chance de arrumar emprego.
 
 ## Vermelho Magias

@@ -41,9 +41,7 @@ public abstract class Card {
         CRIATURA, //tem ataque e defesa, morre, comeca enjoada
         ENCANTAMENTO,
         ARTEFEATO,
-        MAGIA;
-
-
+        MAGIC;
     }
 
     public enum Tribo {
@@ -170,8 +168,6 @@ public abstract class Card {
 
     public Card(String name, int photo, Faction faction, CardType cardType, Tribo org, Texture cardArt, int manaCost) {
 
-
-
         this.photo = photo;
         this.faction = faction;
         this.cardType = cardType;
@@ -188,15 +184,6 @@ public abstract class Card {
 
     //checa se a carta foi clicada pelo mouse, ou dedo
     public boolean isClicked(int screenX, int screenY) {
-
-
-        //System.out.println("mouse.screenX = " + screenX);
-        //System.out.println("c.getxPos() = " + this.getxPos());
-        //System.out.println("c.cardEnd = " + (this.getxPos() + cardSprite.getWidth()));
-        //System.out.println("mouse.screenY = " + ipsolon);
-        // System.out.println("c.getyPos() = " +  this.getyPos() );
-        // System.out.println("c.cardtop = " +  this.getyPos()+cardSprite.getHeight());
-
 
         //checks if mouse pressed this card.
         if (screenX > this.getxPos() &&

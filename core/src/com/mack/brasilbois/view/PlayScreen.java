@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.google.gson.Gson;
 import com.mack.brasilbois.BrBoisMain;
+import com.mack.brasilbois.model.MagicCard;
+import com.mack.brasilbois.model.eventsMapper.CreatureBattleEvent;
 import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
 import com.mack.brasilbois.service.BattleClient;
 import com.mack.brasilbois.service.CardBuilder;
@@ -94,7 +96,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         //generating placeholder deck
-        player = new Player(Tests.getPurpleDeck(20, false));
+        player = new Player(Tests.getRedDeck(20, false));
         enemy = new Player(Tests.getTestDeck(20, true));
         //sounds
         porradaSound = Gdx.audio.newSound(Gdx.files.internal("porrada2.mp3"));
@@ -131,7 +133,7 @@ public class PlayScreen implements Screen, InputProcessor {
         game.batch.begin();
         if(gameEnded) {
             renderGameEnded();
-        } else if (gameStarted) {
+        } else if (gameStarted ) {
             renderBoard();
         }
         else renderAwaitingForPlayer();
@@ -356,47 +358,76 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void checkUserInput(Vector2 mouse) {
 
-        if (currentCard != null) {
+        if (currentCard != null)
+            if (currentCard instanceof CreatureCard) {
+                 doCreatureInteractions(mouse);
+                } else if (currentCard instanceof MagicCard) {
+                 doMagicInteractions(mouse);
+            }
+            }
 
-            boolean wasPlaced = false;
-            switch (currentCard.getCurrentPlace()) {
-                //if the card was in the hand and is a  creature type
-                //the user can place her in any battlefield
-                case HAND:
-                    for (BattleField b : creatureHolders) {
+    private void doMagicInteractions(Vector2 mouse) {
+        boolean returnToHand = true;
+        for (BattleField battleField : creatureHolders) {
+            //if the user tryed to place a card
+            if (mouse.dst(battleField.getXy()) < 65) {
+                //se nao tinha carta antes
+                if (battleField.getCard() != null) {
+                    CreatureCard c = battleField.getCard();
+                    CardInteractor.doMagicInteraction(c,currentCard);
+                    player.totalMana-= currentCard.getManaCost();
+                    battleClient.sendUseMagicCard(battleField, currentCard);
+                    returnToHand = false;
+                    break;
+                }
+            }
+        }
+        if (returnToHand) {
+            currentCard.returnToLastPosition();
+        }
+        currentCard = null;
 
-                        //if the user tryed to place a card
-                        if (mouse.dst(b.getXy()) < 65) {
-                            //se nao tinha carta antes
-                            if (b.getCard() == null) {
-                                wasPlaced = placeCard(b);
-                                break;
-                            }
+    }
+
+    private void doCreatureInteractions(Vector2 mouse) {
+        boolean wasPlaced = false;
+        switch (currentCard.getCurrentPlace()) {
+            //if the card was in the hand and is a  creature type
+            //the user can place her in any battlefield
+            case HAND:
+                for (BattleField b : creatureHolders) {
+
+                    //if the user tryed to place a card
+                    if (mouse.dst(b.getXy()) < 65) {
+                        //se nao tinha carta antes
+                        if (b.getCard() == null) {
+                            wasPlaced = placeCard(b);
+                            break;
                         }
                     }
-                    if (!wasPlaced) {
-                        currentCard.returnToLastPosition();
+                }
+                if (!wasPlaced) {
+                    currentCard.returnToLastPosition();
 
-                        //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
-                    }
-                    break;
-                case FIELD_1:
-                case FIELD_2:
-                case FIELD_3:
-                case FIELD_4:
-                case FIELD_5:
-                case FIELD_6:
-                    //the card was taken from a friendly battlefield
+                    //   System.out.println("card <" + current.getName() + ">" + "was returned to last position");
+                }
+                break;
+            case FIELD_1:
+            case FIELD_2:
+            case FIELD_3:
+            case FIELD_4:
+            case FIELD_5:
+            case FIELD_6:
+                //the card was taken from a friendly battlefield
 
-                    //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
-                    boolean survived = CardInteractor.checkCardInteractions(mouse);
+                //boolean survived = //CardInteractor.checkCardInteractions(screenX, ipsolon);
+                boolean survived = CardInteractor.checkCardInteractions(mouse);
                     if (survived) {
                         currentCard.returnToLastPosition();
                     }
-                    break;
-            }
-            currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
+                break;
         }
+        currentCard = null; //SEMPRE DEPOIS DE TODA ANALISE DO QUE FAZER A CARTA SETAR A MEMORIA NULA
     }
 
 
