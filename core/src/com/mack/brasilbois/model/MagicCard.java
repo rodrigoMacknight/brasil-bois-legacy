@@ -16,11 +16,6 @@ public class MagicCard extends Card {
 
     public MagicType type;
 
-
-
-
-
-
     public MagicCard(String name, int photo, Faction faction, Card.CardType magic, Texture cardArt, int manaCost, MagicType type) {
         super(name, photo, faction, magic, null, cardArt, manaCost);
         this.type = type;
@@ -37,13 +32,11 @@ public class MagicCard extends Card {
         PlayScreen.descFont.draw(batch, this.name, this.getxPos() + SizePositionValues.CARD_DESCRIPTION_X, this.getyPos() + SizePositionValues.CARD_DESCRIPTION_Y);
     }
 
-
     @Override
     public Card getCopy() {
 
-        MagicCard c = new MagicCard(this.name,this.photo,this.faction,this.cardType, this.cardArt, this.manaCost, this.type);
+       return new MagicCard(this.name,this.photo,this.faction,this.cardType, this.cardArt, this.manaCost, this.type);
 
-        return c;
     }
 
     public void doMagicTrick(CreatureCard creatureCard) {

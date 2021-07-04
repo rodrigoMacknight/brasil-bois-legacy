@@ -156,7 +156,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     }
 
-    private void renderAwaitingForPlayer() {
+    private void renderAwaitingForPlayer()  {
         game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
 
         boardFont.draw(game.batch,"Aguardando outro player", 60 , 60 );
@@ -375,7 +375,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 if (battleField.getCard() != null) {
                     CreatureCard c = battleField.getCard();
                     CardInteractor.doMagicInteraction(c,currentCard);
-                    player.totalMana-= currentCard.getManaCost();
+                    player.totalMana -= currentCard.getManaCost();
                     battleClient.sendUseMagicCard(battleField, currentCard);
                     returnToHand = false;
                     break;
