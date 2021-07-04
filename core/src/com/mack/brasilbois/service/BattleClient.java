@@ -2,11 +2,13 @@ package com.mack.brasilbois.service;
 
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
+import com.mack.brasilbois.BrBoisMain;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
 import com.mack.brasilbois.model.MagicCard;
 import com.mack.brasilbois.model.eventsMapper.CreatureBattleEvent;
+import com.mack.brasilbois.model.eventsMapper.MagicEvent;
 import com.mack.brasilbois.model.eventsMapper.PlaceCardEvent;
 import com.mack.brasilbois.utils.PlayerEventsExchanger;
 import com.mack.brasilbois.view.PlayScreen;
@@ -120,7 +122,21 @@ public class BattleClient {
             }
         });
 
+        socket.on("magicCardUsed", new Emitter.Listener() {
+
+
+
+
+            @Override
+            public void call(Object... args) {
+                String data = (String) args[0];
+                handleMagicUsed(data);
+            }
+        });
+
+
     }
+
 
     public void connectPlaySocket() {
         try {
@@ -183,16 +199,37 @@ public class BattleClient {
         try {
             String jsonString = new JSONObject()
                     .put("boardPlace", battleField.getBoardPlace())
-                    .put("currentCard", currentCard.getName())
+                    .put("magicName", currentCard.getName())
                     .toString();
             socket.emit("useMagicCard", jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleMagicUsed(String data) {
+
+
+        Gson gson = new Gson();
+        MagicEvent magicEvent = gson.fromJson(data, MagicEvent.class);
+        MagicCard magicCard =  (MagicCard) BrBoisMain.getCardByName(magicEvent.magicName);
+        Card.BoardPlace where = PlayerEventsExchanger.getMirrorBattleField(magicEvent.boardPlace);
+
+        if (magicCard.type== MagicCard.MagicType.ATACK) {
+            System.out.println("buff magic");
+        } else if (magicCard.type == MagicCard.MagicType.BUFF) {
+            CardInteractor.doMagicInteraction(PlayerEventsExchanger.getEnemyCreatureCardAt(where), magicCard);
+
+            System.out.println("buff magic");
+        } else if (magicCard.type == MagicCard.MagicType.HEAL) {
+            System.out.println("buff magic");
+        }
+
+
+
 
 
     }
-
 
     private void handleEnemyDmg(String data) {
         Gson gson = new Gson();

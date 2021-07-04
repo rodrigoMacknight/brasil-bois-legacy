@@ -375,7 +375,7 @@ public class PlayScreen implements Screen, InputProcessor {
                 if (battleField.getCard() != null) {
                     CreatureCard c = battleField.getCard();
                     CardInteractor.doMagicInteraction(c,currentCard);
-                    player.totalMana -= currentCard.getManaCost();
+                    player.useMana(currentCard.getManaCost());
                     battleClient.sendUseMagicCard(battleField, currentCard);
                     returnToHand = false;
                     break;

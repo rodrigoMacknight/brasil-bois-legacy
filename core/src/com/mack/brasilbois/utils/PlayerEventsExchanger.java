@@ -1,7 +1,11 @@
 package com.mack.brasilbois.utils;
 
+import com.mack.brasilbois.BrBoisMain;
+import com.mack.brasilbois.enums.CardNames;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
+import com.mack.brasilbois.model.MagicCard;
+import com.mack.brasilbois.service.CardBuilder;
 
 import static com.mack.brasilbois.model.Card.BoardPlace.*;
 import static com.mack.brasilbois.view.PlayScreen.creatureHolders;
