@@ -283,8 +283,8 @@ public class CardBuilder {
     private static void buildBolsonaro(List<Card> ret) {
         Texture tex = new Texture("Card_arts/verdeAmarelo/Bolsonaro.png");
 
-        CreatureCard card = new CreatureCard("Bolsonaro", 13, 5, 1, Card.Faction.VERDEAMARELO,
-                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 1);
+        CreatureCard card = new CreatureCard("Bolsonaro", 9, 6, 1, Card.Faction.VERDEAMARELO,
+                Card.CardType.CRIATURA, Card.Tribo.ESTUDANTE, tex, 9);
 
 
         //TODO: GENOCIDIO: -0/-2 QUANDO ENTRA, E 0/-2 CADA TURNO EM TODOS OS INIMIGOS E  -0/-1 QUANDO ENTRA, E 0/-1
