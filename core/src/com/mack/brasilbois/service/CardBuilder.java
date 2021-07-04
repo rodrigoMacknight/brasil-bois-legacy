@@ -328,8 +328,8 @@ public class CardBuilder {
     private static void buildJeanWillis(List<Card> ret) {
         Texture tex = new Texture("Card_arts/vermelho/Jean Wyllys.png");
 
-        CreatureCard card = new CreatureCard("Jean Wyllys", 4, 6, 1, Card.Faction.VERMELHA,
-                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 1);
+        CreatureCard card = new CreatureCard(CardNames.JEAN_WYLLYS, 4, 6, 1, Card.Faction.VERMELHA,
+                Card.CardType.CRIATURA, Card.Tribo.POLITICO, tex, 4);
 
         //TODO: CUSPE -> SPLASH DAMAGE DE 1 DE DANO NAS CRIATRAS ADJACENTES
 

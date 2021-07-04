@@ -126,9 +126,9 @@ public class BattleClient {
 
 
 
-
             @Override
             public void call(Object... args) {
+                System.out.println("magic");
                 String data = (String) args[0];
                 handleMagicUsed(data);
             }

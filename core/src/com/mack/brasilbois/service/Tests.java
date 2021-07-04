@@ -47,9 +47,9 @@ public class Tests {
             Random rand =  new Random();
             int allCardsCount = BrBoisMain.allCards.size();
             c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
-            if (i % 3 == 0) {
-               c = BrBoisMain.getCardByName("Bone da Cut").getCopy();
-            }
+//            if (i % 3 == 0) {
+//               c = BrBoisMain.getCardByName("Bone da Cut").getCopy();
+//            }
             while (c.getFaction()!= Card.Faction.VERMELHA) {
                 c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
             }
