@@ -6,14 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.service.CardBuilder;
+import com.mack.brasilbois.utils.PlayerEventsExchanger;
 import com.mack.brasilbois.view.PlayScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sun.font.CreatedFontTracker;
-
-import static com.mack.brasilbois.view.PlayScreen.currentCard;
+import static com.mack.brasilbois.view.PlayScreen.creatureHolders;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 
 public class CreatureCard extends Card {
@@ -22,31 +21,24 @@ public class CreatureCard extends Card {
     private int attack;
     //or totalHealth
     private int defense;
-
     private boolean targetable;
-
     public boolean isSelectable = true;
-
     // a card is sick in the first turn, and after atacking
     private boolean sick;
-
     private int attackBonus;
-
     private float  attackMultiplier;
+    public int attackingAnimation = 0;
+    public boolean fighted;
+    public List<Status> cardStatus;
 
     public void setAtkBonus(int bonus){
         attackBonus = bonus;
     }
 
-
-    public boolean fighted;
-    public List<Status> cardStatus;
-
     public enum Status{
         COCAINE,
         BUFF_DEF
     }
-
 
     public enum Ability{
         STEALTH,
@@ -54,21 +46,19 @@ public class CreatureCard extends Card {
         BUFF_GENTE_DE_BEM,
         ATRAPALHAR_O_TRANSITO
     }
-
-    public boolean hasDeployAction() {
+    //BATTLECRY
+    public boolean hasSummoningAction() {
         if(abilities.contains(Ability.BUFF_COCAINE)){
             return true;
         }
         if(abilities.contains(Ability.BUFF_GENTE_DE_BEM)){
             return true;
         }
-
-
             return false;
 
     }
-
-    public void doDeployAction(List<BattleField> creatureHolders) {
+    //BATLLECRY
+    public void doSummoningAction(List<BattleField> creatureHolders) {
         //AECIO
         if(abilities.contains(Ability.BUFF_COCAINE)) {
             for (BattleField creatureHolder : creatureHolders) {
@@ -93,13 +83,21 @@ public class CreatureCard extends Card {
             }
         }
     }
-
+    //DEATHRATTLE
     public void doDeathAction() {
         //bloqueia um campo adversario
+
         if(abilities.contains(Ability.ATRAPALHAR_O_TRANSITO)) {
+            atrapalharOtransitoAbility();
+        }
+    }
+
+    private void atrapalharOtransitoAbility() {
+        //TODO GET CHICO
+        CreatureCard deadChico = (CreatureCard) CardBuilder.metaCards.get(0).getCopy();
+        if (this.owner==PlayScreen.player) {
             for (BattleField creatureHolder : enemyCreatureHolders) {
-                if (creatureHolder.getCard() == null ) {
-                    CreatureCard deadChico = CardBuilder.buildChicoBuarqueDead();
+                if (creatureHolder.getCard() == null) {
                     creatureHolder.setCard(deadChico);
                     deadChico.setxPos(creatureHolder.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
                     deadChico.setyPos(creatureHolder.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
@@ -107,6 +105,19 @@ public class CreatureCard extends Card {
                 }
 
             }
+        } else {
+            for (int i = creatureHolders.size() - 1; i>=0 ;i--) {
+                BattleField bt = creatureHolders.get(i);
+                if (bt.getCard() == null) {
+                    BoardPlace mirrorPlace = PlayerEventsExchanger.getMirrorBattleField(bt.getBoardPlace());
+                    bt.setCard(deadChico);
+                    deadChico.setxPos(bt.getXy().x - (SizePositionValues.CARD_SIZE_X / 2));
+                    deadChico.setyPos(bt.getXy().y - (SizePositionValues.CARD_SIZE_Y / 2));
+                    return;
+                }
+
+            }
+
         }
     }
 
@@ -114,7 +125,7 @@ public class CreatureCard extends Card {
         cardStatus.add(status);
         if(status==Status.COCAINE){
             this.attackMultiplier=1.5f;
-            this.health = this.health/2;
+            this.health -=1;
             //mata quem tem 1 de vida
             if(this.health<=0){
                 this.kill();
@@ -122,7 +133,7 @@ public class CreatureCard extends Card {
 
         }
         if(status==Status.BUFF_DEF){
-            this.health += 3;
+            this.health += 2;
         }
     }
 
@@ -146,10 +157,30 @@ public class CreatureCard extends Card {
             case FIELD_6:
                 PlayScreen.getCreatureHolders().get(5).setCard(null);
                 break;
+            case ENEMY_FIELD_1:
+                enemyCreatureHolders.get(0).setCard(null);
+                break;
+            case ENEMY_FIELD_2:
+                enemyCreatureHolders.get(1).setCard(null);
+                break;
+            case ENEMY_FIELD_3:
+                enemyCreatureHolders.get(2).setCard(null);
+                break;
+            case ENEMY_FIELD_4:
+                enemyCreatureHolders.get(3).setCard(null);
+                break;
+            case ENEMY_FIELD_5:
+                enemyCreatureHolders.get(4).setCard(null);
+                break;
+            case ENEMY_FIELD_6:
+                enemyCreatureHolders.get(5).setCard(null);
+                break;
         }
 
         if(hasDeathAbility()) {
-            doDeathAction();
+           // if(this.owner==PlayScreen.player) {
+                doDeathAction();
+            //}
         }
     }
 
@@ -170,23 +201,6 @@ public class CreatureCard extends Card {
 
     public boolean isSick() {
         return sick;
-    }
-
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
     }
 
 
@@ -250,8 +264,8 @@ public class CreatureCard extends Card {
         }
     }
     @Override
-    public void drawWithMana(SpriteBatch batch) {
-        drawWithoutMana(batch);
+    public void drawCardWithMana(SpriteBatch batch) {
+        drawCardWithoutMana(batch);
         //draw mana cost
         batch.draw(PlayScreen.manaCost, this.getxPos() + SizePositionValues.CARD_MANACOST_X, this.getyPos() + SizePositionValues.CARD_MANACOST_Y);
         PlayScreen.cardFont.draw(batch, this.getManaCost() + "", this.getxPos() + SizePositionValues.CARD_MANACOST_X + 5, this.getyPos() + SizePositionValues.CARD_MANACOST_Y + 25);
@@ -261,12 +275,28 @@ public class CreatureCard extends Card {
 
 
     @Override
-    public void drawWithoutMana(SpriteBatch batch) {
+    public void drawCardWithoutMana(SpriteBatch batch) {
+        //System.out.println("drawCard" + this.getName());
+
+
+        if (this.isSick()) {
+            // Color color =  batch.getColor();
+            batch.setColor(0.5f,1,0.5f,1f);
+        } else {
+            if (attackingAnimation > 0) {
+
+                Color c = batch.getColor();
+                attackingAnimation--;
+
+                float gb = (float) 1 / attackingAnimation;
+                batch.setColor(c.r, gb, (float) gb, 1f);
+            }
+        }
 
 
         if(!this.targetable){
             Color c =  batch.getColor();
-            batch.setColor(c.r,c.g,c.b,0.6f);
+            batch.setColor(c.r,c.g,c.b,0.4f);
         }
 
 
@@ -287,11 +317,9 @@ public class CreatureCard extends Card {
         if(cardStatus.size()>0) {
             drawStatus(batch);
         }
-        //if card is stealth reduce alpha
-        if(!this.targetable){
-            Color c =  batch.getColor();
-            batch.setColor(c.r,c.g,c.b,1f);
-        }
+        //return batch to default
+        Color c =  batch.getColor();
+        batch.setColor(1,1,1,1f);
 
     }
     //draw the current buffs the card have

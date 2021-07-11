@@ -33,8 +33,8 @@ public abstract class Card {
     public enum Faction {
         VERMELHA, //esquerdistas
         AZUL, //direitas
-        MACONARIA, //macon
-        BANDIDAGEM //bandidagem
+        ROXA, //macon
+        VERDEAMARELO //bandidagem
     }
 
     public enum CardType {
@@ -58,7 +58,7 @@ public abstract class Card {
 
         MILITAR,
 
-        MUSICO
+        ARTISTA
 
 
     }
@@ -217,8 +217,9 @@ public abstract class Card {
         return manaCost;
     }
 
-    public void drawWithMana(SpriteBatch batch) {
-        drawWithoutMana(batch);
+    public void drawCardWithMana(SpriteBatch batch) {
+        //first draw card without mana
+        drawCardWithoutMana(batch);
         //draw mana cost
         batch.draw(PlayScreen.manaCost, this.getxPos() + SizePositionValues.CARD_MANACOST_X, this.getyPos() + SizePositionValues.CARD_MANACOST_Y);
         PlayScreen.cardFont.draw(batch, this.getManaCost() + "", this.getxPos() + SizePositionValues.CARD_MANACOST_X + 5, this.getyPos() + SizePositionValues.CARD_MANACOST_Y + 25);
@@ -227,7 +228,7 @@ public abstract class Card {
 
 
 
-    public void drawWithoutMana(SpriteBatch batch) {
+    public void drawCardWithoutMana(SpriteBatch batch) {
         batch.draw(PlayScreen.cardBg, this.getxPos(), this.getyPos(), SizePositionValues.CARD_SIZE_X, SizePositionValues.CARD_SIZE_Y);
         batch.draw(this.getCardArt(), this.getxPos() + SizePositionValues.THUMBNAIL_OFFSET_X, this.getyPos() + SizePositionValues.THUMBNAIL_OFFSET_Y, SizePositionValues.THUMBNAIL_SIZE_X, SizePositionValues.THUMBNAIL_SIZE_Y);
         //draw card description

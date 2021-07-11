@@ -10,9 +10,9 @@ import java.util.Stack;
 
 public class Player {
 
-    private static final int INIT_HP = 40;
+    private static final int INIT_HP = 20;
 
-    private int health;
+    public int health;
 
     private Stack<Card> playerDeck;
 
@@ -20,16 +20,12 @@ public class Player {
 
     boolean playing = false;
 
-
-    private List<Card> graveYard;
-
-    private int totalMana;
+    public int totalMana;
     private int currentMana;
 
     public Player(Stack<Card> playerDeck) {
         this.health = INIT_HP;
         this.playerDeck = playerDeck;
-        this.graveYard = null;
         totalMana = 0;
         currentMana = 0;
         hand = new ArrayList<Card>();
@@ -71,7 +67,7 @@ public class Player {
     //draw cards in the grimorio
     public void drawGrimorio(SpriteBatch batch) {
 
-        List<Card> temp = new ArrayList<Card>();
+        List<Card> temp = new ArrayList<>();
         if (!playerDeck.isEmpty()) {
             Card c = playerDeck.peek();
             batch.draw(PlayScreen.cardBack, c.getxPos(), c.getyPos(), c.getCardSprite().getWidth(), c.getCardSprite().getHeight());
@@ -93,7 +89,7 @@ public class Player {
                 c.setxPos(SizePositionValues.FRIENDLY_HAND_X + offset - (hand.size() * cardSize));
                 c.setyPos(SizePositionValues.FRIENDLY_HAND_Y);
 
-                c.drawWithMana(batch);
+                c.drawCardWithMana(batch);
             }
         }
     }
@@ -152,6 +148,7 @@ public class Player {
 
     public void startTurn() {
         //limite de 10 cartas na mão
+        PlayScreen.unsickBattleFields();
         if (hand.size() < 10) {
             pickCard();
         } else {
@@ -168,10 +165,6 @@ public class Player {
             //restarta o mana pool
             currentMana = totalMana;
         }
-
-
-
-
     }
 
     public CharSequence getHp() {

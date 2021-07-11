@@ -5,14 +5,16 @@ import com.mack.brasilbois.enums.SizePositionValues;
 import com.mack.brasilbois.model.BattleField;
 import com.mack.brasilbois.model.Card;
 import com.mack.brasilbois.model.CreatureCard;
-import com.mack.brasilbois.model.Player;
+import com.mack.brasilbois.view.PlayScreen;
 
 
+import static com.mack.brasilbois.view.PlayScreen.battleClient;
 import static com.mack.brasilbois.view.PlayScreen.currentCard;
 import static com.mack.brasilbois.view.PlayScreen.enemy;
 import static com.mack.brasilbois.view.PlayScreen.enemyCreatureHolders;
 import static com.mack.brasilbois.view.PlayScreen.enemyHPPos;
 import static com.mack.brasilbois.view.PlayScreen.porradaSound;
+
 
 import java.util.List;
 
@@ -31,12 +33,23 @@ public class CardInteractor {
             }
             //posicao do mouse
 
+            creature.attackingAnimation = 250;
             //se bati no hp do inimigo
-            if(mousePosition.dst(enemyHPPos)< SizePositionValues.CARD_SNAP_DISTANCE){
+            if(mousePosition.dst(enemyHPPos) < SizePositionValues.CARD_SNAP_DISTANCE){
+
+                playHitEffect();
                 //attacked the player
                 enemy.damage(creature.getAtkTotal());
+                //se estava steahlth tira
                 creature.setTargetable(true);
+
                 creature.fighted = true;
+                //envia para o servidor qual criatura bateu no inimigo
+                battleClient.sendAttackEnemyHP(creature.getCurrentPlace().name());
+                if (enemy.health<=0) {
+                    PlayScreen.gameEnded=true;
+                }
+
                 return  true;
             }
             //para cada inimigo no campo do inimigo
@@ -49,6 +62,8 @@ public class CardInteractor {
                     //se tem criatura e a criatura é passivel de ser target
                     //battle!
                     if (enemyCreatureField.getCard() != null && enemyCreatureField.getCard().isTargetable()) {
+
+                        battleClient.sendAttackEnemyCreature(currentCard.getCurrentPlace(), enemyCreatureField.getBoardPlace());
                         playHitEffect();
                         //da dano
                         creature.damage(enemyCreatureField.getCard());
@@ -79,12 +94,30 @@ public class CardInteractor {
     }
 
 
-    private static void playHitEffect() {
+    public static void playHitEffect() {
         porradaSound.play();
 
         System.out.printf("vai tocar o som");
 
     }
 
+    //battle two cards
+    public static void battleTheseCards(CreatureCard friendlyCreature, CreatureCard enemyCreature) {
+        playHitEffect();
+        enemyCreature.damage(friendlyCreature);
+        enemyCreature.fighted = true;
+        //se a criatura que defendeu morreu
+        if(enemyCreature.getHealth()<=0){
+            System.out.println("card "+ enemyCreature.getName() +  " died");
 
+            enemyCreature.kill();
+        }
+
+        //se a criatura atacante morreu
+        if(friendlyCreature.getHealth()<=0){
+            System.out.println("card "+ friendlyCreature.getName() +  " died");
+            friendlyCreature.kill();
+
+        }
+    }
 }
