@@ -3,7 +3,6 @@ package com.mack.brasilbois.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.mack.brasilbois.BrBoisMain;
 
 public class HtmlLauncher extends GwtApplication {
 

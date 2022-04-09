@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mack.brasilbois.BrBoisMain;
 
 
 public class AndroidLauncher extends AndroidApplication {

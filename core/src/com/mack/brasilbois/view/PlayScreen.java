@@ -128,47 +128,61 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.begin();
+        game.Companion.getBatch().begin();
         if(gameEnded) {
             renderGameEnded();
         } else if (gameStarted) {
             renderBoard();
         }
         else renderAwaitingForPlayer();
-        game.batch.end();
+        game.Companion.getBatch().end();
 
     }
 
     private void renderGameEnded() {
 
         if (player.health <= 0) {
-            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+            game.Companion.getBatch().draw(
+                    awaitBattle,
+                    50, 50,
+                    BrBoisMain.Companion.getWIDTH() - 200,
+                    BrBoisMain.Companion.getHEIGHT() - 200);
 
-            boardFont.draw(game.batch,"VOCÊ É O PERDEDOR!", 400 , 400 );
+            boardFont.draw(game.Companion.getBatch(),"VOCÊ É O PERDEDOR!", 400 , 400 );
         } else {
-            game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+            game.Companion.getBatch().draw(
+                    awaitBattle,
+                    50,
+                    50,
+                    BrBoisMain.Companion.getWIDTH() - 200,
+                    BrBoisMain.Companion.getHEIGHT() - 200);
 
-            boardFont.draw(game.batch,"VOCÊ É O GANHANDOR!", 400 , 400 );
+            boardFont.draw(game.Companion.getBatch(),"VOCÊ É O GANHANDOR!", 400 , 400 );
         }
 
 
     }
 
     private void renderAwaitingForPlayer() {
-        game.batch.draw(awaitBattle, 50, 50, BrBoisMain.WIDTH - 200, BrBoisMain.HEIGHT - 200);
+        game.Companion.getBatch().draw(
+                awaitBattle,
+                50,
+                50,
+                BrBoisMain.Companion.getWIDTH() - 200,
+                BrBoisMain.Companion.getHEIGHT() - 200);
 
-        boardFont.draw(game.batch,"Aguardando outro player", 60 , 60 );
+        boardFont.draw(game.Companion.getBatch(),"Aguardando outro player", 60 , 60 );
     }
 
     private void renderBoard() {
-        game.batch.draw(backGround, 0, 0);
+        game.Companion.getBatch().draw(backGround, 0, 0);
 
-        player.drawGrimorio(game.batch);
-        player.drawHand(game.batch);
+        player.drawGrimorio(game.Companion.getBatch());
+        player.drawHand(game.Companion.getBatch());
 
 
-        enemy.drawEnemyHand(game.batch);
-        enemy.drawGrimorio(game.batch);
+        enemy.drawEnemyHand(game.Companion.getBatch());
+        enemy.drawGrimorio(game.Companion.getBatch());
 
         //creatureHolders.printAssitent();
         //draw cards and creatures on the table
@@ -179,18 +193,18 @@ public class PlayScreen implements Screen, InputProcessor {
 
         drawEndTurn();
         //drawing the hp
-        boardFont.draw(game.batch, player.getHp(), SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
-        boardFont.draw(game.batch, enemy.getHp(), SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
+        boardFont.draw(game.Companion.getBatch(), player.getHp(), SizePositionValues.PLAYER_HP_X, SizePositionValues.PLAYER_HP_Y);
+        boardFont.draw(game.Companion.getBatch(), enemy.getHp(), SizePositionValues.ENEMY_HP_X, SizePositionValues.ENEMY_HP_Y);
         //drawing the qtty of cards still in the deck
-        boardFont.draw(game.batch, player.getDeck().size() + "", SizePositionValues.FRIENDLY_CARD_COUNTER_X, SizePositionValues.FRIENDLY_CARD_COUNTER_Y);
-        boardFont.draw(game.batch, enemy.getDeck().size() + "", SizePositionValues.ENEMY_CARD_COUNTER_X, SizePositionValues.ENEMY_CARD_COUNTER_Y);
+        boardFont.draw(game.Companion.getBatch(), player.getDeck().size() + "", SizePositionValues.FRIENDLY_CARD_COUNTER_X, SizePositionValues.FRIENDLY_CARD_COUNTER_Y);
+        boardFont.draw(game.Companion.getBatch(), enemy.getDeck().size() + "", SizePositionValues.ENEMY_CARD_COUNTER_X, SizePositionValues.ENEMY_CARD_COUNTER_Y);
 
         if (currentCard != null) {
             //   game.batch.draw(new Texture("coxinha.jpg"), creatureHolders.get(0).getXy().x, creatureHolders.get(0).getXy().y);
             if (currentCard.getCurrentPlace().equals(Card.BoardPlace.HAND)) {
-                currentCard.drawCardWithMana(game.batch);
+                currentCard.drawCardWithMana(game.Companion.getBatch());
             } else {
-                currentCard.drawCardWithoutMana(game.batch);
+                currentCard.drawCardWithoutMana(game.Companion.getBatch());
             }
 
         }
@@ -199,11 +213,11 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void drawEndTurn() {
         if (player.isPlaying()) {
-            game.batch.draw(endTurn, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
+            game.Companion.getBatch().draw(endTurn, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
                     , SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
                     SizePositionValues.PASS_TURN_UPPER_Y - SizePositionValues.PASS_TURN_BOTTON_Y);
         } else {
-            game.batch.draw(cocaine, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
+            game.Companion.getBatch().draw(cocaine, SizePositionValues.PASS_TURN_LEFT_X, SizePositionValues.PASS_TURN_BOTTON_Y
                     , SizePositionValues.PASS_TURN_RIGHT_X - SizePositionValues.PASS_TURN_LEFT_X,
                     SizePositionValues.PASS_TURN_UPPER_Y - SizePositionValues.PASS_TURN_BOTTON_Y);
         }
@@ -215,32 +229,32 @@ public class PlayScreen implements Screen, InputProcessor {
 
         for (int i = 0; i < player.getCurrentMana(); i++) {
             if (i < 5) {
-                game.batch.draw(mana, SizePositionValues.PLAYER_MANA_X + (manaOffset * i), SizePositionValues.PLAYER_MANA_Y);
+                game.Companion.getBatch().draw(mana, SizePositionValues.PLAYER_MANA_X + (manaOffset * i), SizePositionValues.PLAYER_MANA_Y);
             } else {
-                game.batch.draw(mana, SizePositionValues.PLAYER_MANA_X + (manaOffset * (i - 5)), SizePositionValues.PLAYER_MANA_Y - manaOffset);
+                game.Companion.getBatch().draw(mana, SizePositionValues.PLAYER_MANA_X + (manaOffset * (i - 5)), SizePositionValues.PLAYER_MANA_Y - manaOffset);
             }
         }
         for (int i = player.getCurrentMana(); i < player.getTotalMana(); i++) {
             if (i < 5) {
-                game.batch.draw(emptyMana, SizePositionValues.PLAYER_MANA_X + manaOffset * i, SizePositionValues.PLAYER_MANA_Y);
+                game.Companion.getBatch().draw(emptyMana, SizePositionValues.PLAYER_MANA_X + manaOffset * i, SizePositionValues.PLAYER_MANA_Y);
             } else {
-                game.batch.draw(emptyMana, SizePositionValues.PLAYER_MANA_X + (manaOffset * (i - 5)), SizePositionValues.PLAYER_MANA_Y - manaOffset);
+                game.Companion.getBatch().draw(emptyMana, SizePositionValues.PLAYER_MANA_X + (manaOffset * (i - 5)), SizePositionValues.PLAYER_MANA_Y - manaOffset);
             }
 
         }
 
         for (int i = 0; i < enemy.getCurrentMana(); i++) {
             if (i < 5) {
-                game.batch.draw(mana, SizePositionValues.ENEMY_MANA_X + (manaOffset * i), SizePositionValues.ENEMY_MANA_Y);
+                game.Companion.getBatch().draw(mana, SizePositionValues.ENEMY_MANA_X + (manaOffset * i), SizePositionValues.ENEMY_MANA_Y);
             } else {
-                game.batch.draw(mana, SizePositionValues.ENEMY_MANA_X + (manaOffset * (i - 5)), SizePositionValues.ENEMY_MANA_Y - manaOffset);
+                game.Companion.getBatch().draw(mana, SizePositionValues.ENEMY_MANA_X + (manaOffset * (i - 5)), SizePositionValues.ENEMY_MANA_Y - manaOffset);
             }
         }
         for (int i = enemy.getCurrentMana(); i < enemy.getTotalMana(); i++) {
             if (i < 5) {
-                game.batch.draw(emptyMana, SizePositionValues.ENEMY_MANA_X + manaOffset * i, SizePositionValues.ENEMY_MANA_Y);
+                game.Companion.getBatch().draw(emptyMana, SizePositionValues.ENEMY_MANA_X + manaOffset * i, SizePositionValues.ENEMY_MANA_Y);
             } else {
-                game.batch.draw(emptyMana, SizePositionValues.ENEMY_MANA_X + (manaOffset * (i - 5)), SizePositionValues.ENEMY_MANA_Y - manaOffset);
+                game.Companion.getBatch().draw(emptyMana, SizePositionValues.ENEMY_MANA_X + (manaOffset * (i - 5)), SizePositionValues.ENEMY_MANA_Y - manaOffset);
             }
 
         }
@@ -251,12 +265,12 @@ public class PlayScreen implements Screen, InputProcessor {
     private void drawBattlefieldAssistant() {
         for (BattleField creatureHolder : creatureHolders) {
             Texture x = new Texture("Card_arts/coxinha.png");
-            game.batch.draw(x, creatureHolder.getXy().x, creatureHolder.getXy().y, 5, 5);
+            game.Companion.getBatch().draw(x, creatureHolder.getXy().x, creatureHolder.getXy().y, 5, 5);
             x.dispose();
         }
         for (BattleField creatureHolder : enemyCreatureHolders) {
             Texture x = new Texture("Card_arts/coxinha.png");
-            game.batch.draw(x, creatureHolder.getXy().x, creatureHolder.getXy().y, 5, 5);
+            game.Companion.getBatch().draw(x, creatureHolder.getXy().x, creatureHolder.getXy().y, 5, 5);
             x.dispose();
         }
     }
@@ -265,7 +279,7 @@ public class PlayScreen implements Screen, InputProcessor {
         for (BattleField battleField : creatureHolders) {
             Card c = battleField.getCard();
             if (c != null) {
-                c.drawCardWithoutMana(game.batch);
+                c.drawCardWithoutMana(game.Companion.getBatch());
                 // game.batch.draw(PlayScreen.cardBg, c.getxPos(), c.getyPos(), Values.CARD_SIZE_X, Values.CARD_SIZE_Y);
                 //game.batch.draw(c.getCardArt(), c.getxPos() + Values.THUMBNAIL_OFFSET_X, c.getyPos() + Values.THUMBNAIL_OFFSET_Y, Values.THUMBNAIL_SIZE_X, Values.THUMBNAIL_SIZE_Y);
 
@@ -277,7 +291,7 @@ public class PlayScreen implements Screen, InputProcessor {
             if (c != null) {
                 //game.batch.draw(PlayScreen.cardBg, c.getxPos(), c.getyPos(), Values.CARD_SIZE_X, Values.CARD_SIZE_Y);
                 //game.batch.draw(c.getCardArt(), c.getxPos() + Values.THUMBNAIL_OFFSET_X, c.getyPos() + Values.THUMBNAIL_OFFSET_Y, Values.THUMBNAIL_SIZE_X, Values.THUMBNAIL_SIZE_Y);
-                c.drawCardWithoutMana(game.batch);
+                c.drawCardWithoutMana(game.Companion.getBatch());
             }
         }
     }

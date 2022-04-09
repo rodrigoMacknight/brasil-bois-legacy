@@ -7,9 +7,9 @@ import com.mack.brasilbois.BrBoisMain;
 public class DesktopLauncherEnemy {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width= BrBoisMain.WIDTH;
-		config.height= BrBoisMain.HEIGHT;
-		config.title = BrBoisMain.TITLE;
+		config.width= BrBoisMain.Companion.getWIDTH();
+		config.height= BrBoisMain.Companion.getHEIGHT();
+		config.title = BrBoisMain.Companion.getTITLE();
 		new LwjglApplication(new BrBoisMain(), config);
 	}
 }

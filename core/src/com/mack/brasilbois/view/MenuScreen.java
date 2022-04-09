@@ -44,14 +44,14 @@ public class MenuScreen implements Screen,InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        game.batch.begin();
-        game.batch.draw(bg,0,0);
-        game.batch.draw(play,midX - play.getWidth()/2,midY + 140);
-        game.batch.draw(mountDeck,midX - mountDeck.getWidth()/2,midY + 60);
-        game.batch.draw(options,midX - options.getWidth()/2,midY - 20);
-        game.batch.draw(exit,midX - exit.getWidth()/2,midY - 100);
+        game.Companion.getBatch().begin();
+        game.Companion.getBatch().draw(bg,0,0);
+        game.Companion.getBatch().draw(play,midX - play.getWidth()/2,midY + 140);
+        game.Companion.getBatch().draw(mountDeck,midX - mountDeck.getWidth()/2,midY + 60);
+        game.Companion.getBatch().draw(options,midX - options.getWidth()/2,midY - 20);
+        game.Companion.getBatch().draw(exit,midX - exit.getWidth()/2,midY - 100);
 
-        game.batch.end();
+        game.Companion.getBatch().end();
 
     }
 

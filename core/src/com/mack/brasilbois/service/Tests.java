@@ -18,8 +18,8 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
-            int allCardsCount = BrBoisMain.allCards.size();
-            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            int allCardsCount = BrBoisMain.Companion.getAllCards().size();
+            c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
 
             if(enemy) {
                 c.setxPos(SizePositionValues.ENEMY_GRIMORIO_X);
@@ -42,10 +42,10 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
-            int allCardsCount = BrBoisMain.allCards.size();
-            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            int allCardsCount = BrBoisMain.Companion.getAllCards().size();
+            c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             while (c.getFaction()!= Card.Faction.VERMELHA) {
-                c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+                c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             }
 
             if(enemy) {
@@ -70,10 +70,10 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
-            int allCardsCount = BrBoisMain.allCards.size();
-            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            int allCardsCount = BrBoisMain.Companion.getAllCards().size();
+            c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             while (c.getFaction()!= Card.Faction.VERDEAMARELO) {
-                c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+                c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             }
 
             if(enemy) {
@@ -96,10 +96,10 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
-            int allCardsCount = BrBoisMain.allCards.size();
-            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            int allCardsCount = BrBoisMain.Companion.getAllCards().size();
+            c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             while (c.getFaction()!= Card.Faction.AZUL) {
-                c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+                c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             }
 
             if(enemy) {
@@ -121,10 +121,10 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             Random rand =  new Random();
-            int allCardsCount = BrBoisMain.allCards.size();
-            c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+            int allCardsCount = BrBoisMain.Companion.getAllCards().size();
+            c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             while (c.getFaction()!= Card.Faction.ROXA) {
-                c = BrBoisMain.allCards.get(rand.nextInt(allCardsCount)).getCopy();
+                c = BrBoisMain.Companion.getAllCards().get(rand.nextInt(allCardsCount)).getCopy();
             }
 
             if(enemy) {
@@ -147,9 +147,9 @@ public class Tests {
         for (int i= 0;i<cardTotal;i++){
             Card c ;
             if (i%2 ==0) {
-                 c = BrBoisMain.getCardByName("Chico Buarque").getCopy();
+                 c = BrBoisMain.Companion.getCardByName("Chico Buarque").getCopy();
             } else {
-                c = BrBoisMain.getCardByName("Aecio Neves").getCopy();
+                c = BrBoisMain.Companion.getCardByName("Aecio Neves").getCopy();
             }
             if(enemy) {
                 c.setxPos(SizePositionValues.ENEMY_GRIMORIO_X);

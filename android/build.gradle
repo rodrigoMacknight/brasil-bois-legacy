@@ -94,3 +94,10 @@ task run(type: Exec) {
 }
 
 eclipse.project.name = appName + "-android"
+apply plugin: 'kotlin-android'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

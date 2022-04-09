@@ -453,7 +453,7 @@ public class CardBuilder {
 
     public static Card generateCardFromName(final String cardName) {
         List<Card> cardFromNameList =
-                BrBoisMain.allCards.stream().
+                BrBoisMain.Companion.getAllCards().stream().
                         filter(card ->card.getName().equals(cardName)).collect(Collectors.toList());
 
         return cardFromNameList.get(0).getCopy();
